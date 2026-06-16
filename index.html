@@ -15,52 +15,23 @@
             font-family: 'Sarabun', sans-serif;
             background-color: #e8f0fe;
         }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(203, 213, 225, 0.5);
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(100, 116, 139, 0.4);
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(100, 116, 139, 0.7);
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(203,213,225,0.5); border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.4); border-radius: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(100,116,139,0.7); }
 
-        /* =========================================
-           RESPONSIVE SCALING
-           ========================================= */
-
-        /* Desktop (≥1024px): แสดงแบบ dashboard เต็มหน้าจอ */
         @media (min-width: 1024px) {
-            body {
-                overflow: hidden;
-                height: 100vh;
-                width: 100vw;
-            }
+            body { overflow: hidden; height: 100vh; width: 100vw; }
         }
-
-        /* Tablet & Mobile (<1024px): เลื่อนได้ตามปกติ */
         @media (max-width: 1023px) {
-            body {
-                overflow-y: auto !important;
-                height: auto !important;
-                min-height: 100vh;
-            }
-        }
-
-        /* Card stat numbers — ลดขนาดบนหน้าจอเล็ก */
-        @media (max-width: 639px) {
-            .stat-number-xl { font-size: 2.5rem !important; }
-            .stat-number-md { font-size: 1.5rem !important; }
+            body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
+            #panel-left { display: none; }
         }
     </style>
 </head>
-<body class="text-slate-800 min-h-screen w-full p-3 md:p-4 lg:p-5 flex flex-col lg:justify-between lg:h-screen lg:overflow-hidden box-border text-sm font-semibold">
+<body class="text-slate-800 min-h-screen w-full p-3 md:p-4 lg:p-5 flex flex-col lg:h-screen lg:overflow-hidden box-border text-sm font-semibold">
 
+    <!-- ===== HEADER ===== -->
     <div class="bg-white border border-slate-200 rounded-xl px-4 md:px-6 py-3 md:py-4 flex flex-wrap justify-between items-center gap-2 shadow-md shrink-0 mb-3">
         <div class="min-w-0">
             <h1 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-slate-800 tracking-wide flex items-center gap-2">
@@ -76,151 +47,154 @@
         </div>
     </div>
 
-    <div class="flex-1 flex flex-col justify-between min-h-0 space-y-2 md:space-y-3 lg:space-y-4">
-        
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3 lg:gap-4 shrink-0">
-            <div class="bg-white border-t-4 border-t-sky-500 border-x border-b border-slate-200 rounded-xl p-3 md:p-4 flex flex-col justify-between h-28 md:h-32 lg:h-36 shadow-lg shadow-slate-200/60">
-                <div class="flex justify-between items-center w-full">
-                    <span class="text-xs md:text-sm lg:text-base font-black text-sky-600 uppercase tracking-wider block truncate">1. คำขอทั้งหมดในระบบ</span>
-                    <div class="p-1.5 bg-sky-50 rounded-lg text-sky-500 shrink-0">
-                        <svg class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586A1 1 0 0112 3.414L15.586 7a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-                    </div>
-                </div>
-                <div class="flex items-baseline justify-start gap-1.5 mt-auto">
-                    <span id="total-requests" class="text-4xl md:text-5xl lg:text-6xl font-black text-slate-800 tracking-tight leading-none">-</span>
-                    <span class="text-sm md:text-base font-black text-slate-500">รายการ</span>
+    <!-- ===== STAT CARDS ===== -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3 lg:gap-4 shrink-0 mb-2 md:mb-3 lg:mb-4">
+        <div class="bg-white border-t-4 border-t-sky-500 border-x border-b border-slate-200 rounded-xl p-3 md:p-4 flex flex-col justify-between h-28 md:h-32 lg:h-36 shadow-lg shadow-slate-200/60">
+            <div class="flex justify-between items-center w-full">
+                <span class="text-xs md:text-sm lg:text-base font-black text-sky-600 uppercase tracking-wider block truncate">1. คำขอทั้งหมดในระบบ</span>
+                <div class="p-1.5 bg-sky-50 rounded-lg text-sky-500 shrink-0">
+                    <svg class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586A1 1 0 0112 3.414L15.586 7a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 </div>
             </div>
+            <div class="flex items-baseline justify-start gap-1.5 mt-auto">
+                <span id="total-requests" class="text-4xl md:text-5xl lg:text-6xl font-black text-slate-800 tracking-tight leading-none">-</span>
+                <span class="text-sm md:text-base font-black text-slate-500">รายการ</span>
+            </div>
+        </div>
 
-            <div class="bg-white border-t-4 border-t-emerald-500 border-x border-b border-slate-200 rounded-xl p-3 md:p-4 flex flex-col justify-between h-28 md:h-32 lg:h-36 shadow-lg shadow-slate-200/60">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs md:text-sm lg:text-base font-black text-emerald-600 uppercase tracking-wider block truncate">2. งาน Shapefile</span>
-                    <span id="shp-percent" class="text-xs md:text-sm font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 shadow-sm">-%</span>
+        <div class="bg-white border-t-4 border-t-emerald-500 border-x border-b border-slate-200 rounded-xl p-3 md:p-4 flex flex-col justify-between h-28 md:h-32 lg:h-36 shadow-lg shadow-slate-200/60">
+            <div class="flex justify-between items-center">
+                <span class="text-xs md:text-sm lg:text-base font-black text-emerald-600 uppercase tracking-wider block truncate">2. งาน Shapefile</span>
+                <span id="shp-percent" class="text-xs md:text-sm font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 shadow-sm">-%</span>
+            </div>
+            <div class="grid grid-cols-2 gap-2 mt-auto border-t border-slate-200 pt-1.5">
+                <div class="truncate">
+                    <span class="text-xs uppercase font-black tracking-wider text-slate-400 block mb-0.5">เสร็จสะสม</span>
+                    <span id="shp-completed" class="text-2xl md:text-3xl font-black text-emerald-600 leading-none">-</span>
                 </div>
-                <div class="grid grid-cols-2 gap-2 mt-auto border-t border-slate-200 pt-1.5">
-                    <div class="truncate">
-                        <span class="text-xs uppercase font-black tracking-wider text-slate-400 block mb-0.5">เสร็จสะสม</span>
-                        <span id="shp-completed" class="text-2xl md:text-3xl font-black text-emerald-600 leading-none">-</span>
-                    </div>
-                    <div class="border-l border-slate-200 pl-2 truncate">
-                        <span class="text-xs uppercase font-black tracking-wider text-slate-400 block mb-0.5">คงเหลือ</span>
-                        <span id="shp-remaining" class="text-2xl md:text-3xl font-black text-rose-500 leading-none">-</span>
-                    </div>
+                <div class="border-l border-slate-200 pl-2 truncate">
+                    <span class="text-xs uppercase font-black tracking-wider text-slate-400 block mb-0.5">คงเหลือ</span>
+                    <span id="shp-remaining" class="text-2xl md:text-3xl font-black text-rose-500 leading-none">-</span>
                 </div>
             </div>
+        </div>
 
-            <div class="bg-white border-t-4 border-t-amber-500 border-x border-b border-slate-200 rounded-xl p-3 md:p-4 flex flex-col justify-between h-28 md:h-32 lg:h-36 shadow-lg shadow-slate-200/60">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs md:text-sm lg:text-base font-black text-amber-600 uppercase tracking-wider block truncate">3. แผนที่/แผนผัง</span>
-                    <span id="map-percent" class="text-xs md:text-sm font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 shadow-sm">-%</span>
+        <div class="bg-white border-t-4 border-t-amber-500 border-x border-b border-slate-200 rounded-xl p-3 md:p-4 flex flex-col justify-between h-28 md:h-32 lg:h-36 shadow-lg shadow-slate-200/60">
+            <div class="flex justify-between items-center">
+                <span class="text-xs md:text-sm lg:text-base font-black text-amber-600 uppercase tracking-wider block truncate">3. แผนที่/แผนผัง</span>
+                <span id="map-percent" class="text-xs md:text-sm font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 shadow-sm">-%</span>
+            </div>
+            <div class="grid grid-cols-3 gap-1 mt-auto border-t border-slate-200 pt-1.5 text-center">
+                <div class="truncate text-left">
+                    <span class="text-xs font-black text-slate-400 block mb-0.5">ต้องทำ</span>
+                    <span id="map-total" class="text-xl md:text-3xl font-black text-slate-800 leading-none">-</span>
                 </div>
-                <div class="grid grid-cols-3 gap-1 mt-auto border-t border-slate-200 pt-1.5 text-center">
-                    <div class="truncate text-left">
-                        <span class="text-xs font-black text-slate-400 block mb-0.5">ต้องทำ</span>
-                        <span id="map-total" class="text-xl md:text-3xl font-black text-slate-800 leading-none">-</span>
-                    </div>
-                    <div class="border-l border-slate-200 pl-1 truncate">
-                        <span class="text-xs font-black text-amber-600 block mb-0.5">เสร็จ</span>
-                        <span id="map-completed" class="text-xl md:text-3xl font-black text-amber-600 leading-none">-</span>
-                    </div>
-                    <div class="border-l border-slate-200 pl-1 truncate text-right">
-                        <span class="text-xs font-black text-rose-500 block mb-0.5">เหลือ</span>
-                        <span id="map-remaining" class="text-xl md:text-3xl font-black text-rose-500 leading-none">-</span>
-                    </div>
+                <div class="border-l border-slate-200 pl-1 truncate">
+                    <span class="text-xs font-black text-amber-600 block mb-0.5">เสร็จ</span>
+                    <span id="map-completed" class="text-xl md:text-3xl font-black text-amber-600 leading-none">-</span>
+                </div>
+                <div class="border-l border-slate-200 pl-1 truncate text-right">
+                    <span class="text-xs font-black text-rose-500 block mb-0.5">เหลือ</span>
+                    <span id="map-remaining" class="text-xl md:text-3xl font-black text-rose-500 leading-none">-</span>
                 </div>
             </div>
+        </div>
 
-            <div class="bg-white border-t-4 border-t-indigo-500 border-x border-b border-slate-200 rounded-xl p-3 md:p-4 flex flex-col justify-between h-28 md:h-32 lg:h-36 shadow-lg shadow-slate-200/60">
-                <div class="flex justify-between items-center">
-                    <span class="text-xs md:text-sm lg:text-base font-black text-indigo-600 uppercase tracking-wider block truncate">4. รายงานสิ่งแวดล้อม</span>
-                    <span id="env-percent" class="text-xs md:text-sm font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200 shadow-sm">-%</span>
+        <div class="bg-white border-t-4 border-t-indigo-500 border-x border-b border-slate-200 rounded-xl p-3 md:p-4 flex flex-col justify-between h-28 md:h-32 lg:h-36 shadow-lg shadow-slate-200/60">
+            <div class="flex justify-between items-center">
+                <span class="text-xs md:text-sm lg:text-base font-black text-indigo-600 uppercase tracking-wider block truncate">4. รายงานสิ่งแวดล้อม</span>
+                <span id="env-percent" class="text-xs md:text-sm font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200 shadow-sm">-%</span>
+            </div>
+            <div class="grid grid-cols-3 gap-1 mt-auto border-t border-slate-200 pt-1.5 text-center">
+                <div class="truncate text-left">
+                    <span class="text-xs font-black text-slate-400 block mb-0.5">ต้องทำ</span>
+                    <span id="env-total" class="text-xl md:text-3xl font-black text-slate-800 leading-none">-</span>
                 </div>
-                <div class="grid grid-cols-3 gap-1 mt-auto border-t border-slate-200 pt-1.5 text-center">
-                    <div class="truncate text-left">
-                        <span class="text-xs font-black text-slate-400 block mb-0.5">ต้องทำ</span>
-                        <span id="env-total" class="text-xl md:text-3xl font-black text-slate-800 leading-none">-</span>
+                <div class="border-l border-slate-200 pl-1 truncate">
+                    <span class="text-xs font-black text-indigo-600 block mb-0.5">สมบูรณ์</span>
+                    <span id="env-completed" class="text-xl md:text-3xl font-black text-indigo-600 leading-none">-</span>
+                </div>
+                <div class="border-l border-slate-200 pl-1 truncate text-right">
+                    <span class="text-xs font-black text-rose-500 block mb-0.5">เหลือ</span>
+                    <span id="env-remaining" class="text-xl md:text-3xl font-black text-rose-500 leading-none">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MAIN CONTENT: LEFT PANEL (2) + RIGHT CONTENT (1) ===== -->
+    <div class="flex-1 flex flex-row gap-3 md:gap-4 lg:gap-5 min-h-0">
+
+        <!-- ===== PANEL LEFT (กรอบ 2) - ความคืบหน้า จากไฟล์ 2.html ===== -->
+        <div id="panel-left" class="w-[15%] bg-white border border-slate-200 rounded-xl p-3 md:p-4 flex flex-col shadow-md min-h-0 shrink-0">
+            <h3 class="text-sm font-black text-sky-600 mb-2 flex flex-col gap-1 shrink-0 border-b border-slate-200 pb-2">
+                <span class="flex items-center gap-1.5 text-base">
+                    <span class="h-3 w-0.5 bg-sky-500 rounded-full"></span> ความคืบหน้า
+                </span>
+                <span id="custom-title-date" class="text-slate-700 pl-2 font-black block truncate text-sm">...</span>
+            </h3>
+            
+            <div class="flex-1 overflow-y-auto custom-scrollbar space-y-3.5 pr-0.5 text-xs font-bold">
+                <!-- Shapefile block -->
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5">
+                    <div id="shp-box-header" class="flex flex-row justify-between items-center text-emerald-600 font-black text-sm w-full">
+                        <span>📦 ส่ง Shapefile</span>
+                        <span id="date-shp-total-sub" class="text-xs text-slate-400 font-bold shrink-0">0 คำขอ</span>
                     </div>
-                    <div class="border-l border-slate-200 pl-1 truncate">
-                        <span class="text-xs font-black text-indigo-600 block mb-0.5">สมบูรณ์</span>
-                        <span id="env-completed" class="text-xl md:text-3xl font-black text-indigo-600 leading-none">-</span>
+                    <div id="date-shp-list" class="space-y-1.5 text-slate-700 max-h-24 overflow-y-auto custom-scrollbar mt-1.5"></div>
+                </div>
+
+                <!-- แผนที่/แผนผัง block -->
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5">
+                    <div id="map-box-header" class="flex flex-row justify-between items-center text-amber-600 font-black text-sm w-full">
+                        <span>🗺️ แผนที่/แผนผัง</span>
+                        <span id="date-map-total-sub" class="text-xs text-slate-400 font-bold shrink-0">0 คำขอ</span>
                     </div>
-                    <div class="border-l border-slate-200 pl-1 truncate text-right">
-                        <span class="text-xs font-black text-rose-500 block mb-0.5">เหลือ</span>
-                        <span id="env-remaining" class="text-xl md:text-3xl font-black text-rose-500 leading-none">-</span>
+                    <div id="date-map-list" class="space-y-1.5 text-slate-700 max-h-24 overflow-y-auto custom-scrollbar mt-1.5"></div>
+                </div>
+
+                <!-- สิ่งแวดล้อม block -->
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5 flex flex-col min-h-0">
+                    <div id="env-box-header" class="flex flex-row justify-between items-center text-indigo-600 font-black text-sm w-full border-b border-slate-200 pb-1.5">
+                        <span>🍃 สิ่งแวดล้อม</span>
+                        <span id="date-env-total-sub" class="text-xs text-slate-400 font-bold shrink-0">0 คำขอ</span>
+                    </div>
+                    <div class="space-y-2 max-h-44 overflow-y-auto custom-scrollbar pr-0.5 mt-2">
+                        <div id="draft-box" class="flex flex-col">
+                            <span class="text-slate-500 font-black">• ร่างส่งเขต</span>
+                            <div id="date-env-draft-list" class="pl-2 space-y-1 text-slate-700 font-semibold hidden mt-1 border-l-2 border-indigo-100"></div>
+                        </div>
+                        <div id="recv-box" class="flex flex-col">
+                            <span class="text-slate-500 font-black">• รับจากแขวง</span>
+                            <div id="date-env-recv-list" class="pl-2 space-y-1 text-slate-700 font-semibold hidden mt-1 border-l-2 border-indigo-100"></div>
+                        </div>
+                        <div id="comp-box" class="flex flex-col">
+                            <span class="text-slate-500 font-black">• สมบูรณ์</span>
+                            <div id="date-env-comp-list" class="pl-2 space-y-1 text-slate-700 font-semibold hidden mt-1 border-l-2 border-indigo-100"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
+        <!-- ===== PANEL RIGHT (กรอบ 1) - Charts จากไฟล์ 1.html ===== -->
         <div class="flex-1 flex flex-col lg:flex-row gap-3 md:gap-4 lg:gap-5 min-h-0">
-            
-            <div class="w-full lg:w-[15%] bg-white border border-slate-200 rounded-xl p-3 md:p-4 flex flex-col shadow-md min-h-0 shrink-0 max-h-64 lg:max-h-none">
-                <h3 class="text-sm font-black text-sky-600 mb-2 flex flex-col gap-1 shrink-0 border-b border-slate-200 pb-2">
-                    <span class="flex items-center gap-1.5 text-base">
-                        <span class="h-3 w-0.5 bg-sky-500 rounded-full"></span> ความคืบหน้า
-                    </span>
-                    <span id="custom-title-date" class="text-slate-700 pl-2 font-black block truncate text-sm">...</span>
-                </h3>
-                
-                <div class="flex-1 overflow-y-auto custom-scrollbar space-y-3.5 pr-0.5 text-xs font-bold">
-                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5">
-                        <div class="border-b border-slate-200 pb-1 mb-1.5 flex flex-col text-emerald-600 font-black text-sm">
-                            <span>📦 ส่ง Shapefile</span>
-                            <span id="date-shp-total" class="text-xs text-slate-500 font-bold mt-0.5">- คำขอ</span>
-                        </div>
-                        <div id="date-shp-list" class="space-y-1.5 text-slate-700 max-h-24 overflow-y-auto custom-scrollbar"></div>
-                    </div>
 
-                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5">
-                        <div class="border-b border-slate-200 pb-1 mb-1.5 flex flex-col text-amber-600 font-black text-sm">
-                            <span>🗺️ แผนที่/แผนผัง</span>
-                            <span id="date-map-total" class="text-xs text-slate-500 font-bold mt-0.5">- คำขอ</span>
-                        </div>
-                        <div id="date-map-list" class="space-y-1.5 text-slate-700 max-h-24 overflow-y-auto custom-scrollbar"></div>
-                    </div>
-
-                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5 flex flex-col min-h-0">
-                        <div class="border-b border-slate-200 pb-1 mb-1.5 flex flex-col text-indigo-600 font-black text-sm">
-                            <span>🍃 สิ่งแวดล้อม</span>
-                            <span id="date-env-total" class="text-xs text-slate-500 font-bold mt-0.5">- คำขอ</span>
-                        </div>
-                        <div class="space-y-2.5 max-h-44 overflow-y-auto custom-scrollbar pr-0.5">
-                            <div>
-                                <div class="text-slate-500 font-black border-b border-slate-200 mb-1 flex justify-between text-xs">
-                                    <span>• ร่างส่งเขต</span><span id="sub-env-draft" class="text-slate-700 font-black">-</span>
-                                </div>
-                                <div id="date-env-draft-list" class="pl-1 space-y-1 text-slate-700 font-semibold"></div>
-                            </div>
-                            <div>
-                                <div class="text-slate-500 font-black border-b border-slate-200 mb-1 flex justify-between text-xs">
-                                    <span>• สมบูรณ์</span><span id="sub-env-comp" class="text-slate-700 font-black">-</span>
-                                </div>
-                                <div id="date-env-comp-list" class="pl-1 space-y-1 text-slate-700 font-semibold"></div>
-                            </div>
-                            <div>
-                                <div class="text-slate-500 font-black border-b border-slate-200 mb-1 flex justify-between text-xs">
-                                    <span>• รับจากแขวง</span><span id="sub-env-recv" class="text-slate-700 font-black">-</span>
-                                </div>
-                                <div id="date-env-recv-list" class="pl-1 space-y-1 text-slate-700 font-semibold"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+            <!-- Bar chart: Shapefile -->
             <div class="flex-1 bg-white border border-slate-200 rounded-xl p-3 md:p-4 flex flex-col shadow-md min-h-0" style="min-height: 280px;">
                 <h3 class="text-sm md:text-base font-black text-slate-800 mb-2 flex items-center gap-1.5 shrink-0">
-                    <span class="h-3 w-0.5 bg-emerald-500 rounded-full"></span> ความคืบหน้างาน Shapefile
+                    <span class="h-3 w-0.5 bg-emerald-500 rounded-full"></span> ความคืบหน้างาน Shapefile <span class="text-xs font-bold text-slate-400">(คลิกที่แท่งชาร์ตเพื่อดูแจกแจงรายแขวง)</span>
                 </h3>
                 <div class="flex-1 min-h-0 w-full relative">
                     <canvas id="shpChart"></canvas>
                 </div>
             </div>
 
+            <!-- Donut charts: แผนที่ + สิ่งแวดล้อม -->
             <div class="w-full lg:w-[22%] flex flex-row lg:flex-col justify-between gap-3 md:gap-4 min-h-0 shrink-0">
                 <div class="flex-1 bg-white border border-slate-200 rounded-xl p-3 md:p-4 flex flex-col shadow-md min-h-0" style="min-height: 200px;">
                     <h4 class="font-black text-slate-800 text-sm md:text-base border-b border-slate-200 pb-2 flex items-center gap-1.5 shrink-0">
-                        <span class="h-2.5 w-2.5 rounded-full bg-amber-400"></span> งานแผนที่คำขอ
+                        <span class="h-2.5 w-2.5 rounded-full bg-amber-400"></span> งานแผนที่คำขอ <span class="text-[10px] font-bold text-slate-400 ml-auto">(คลิกดูรายแขวงได้)</span>
                     </h4>
                     <div class="flex-1 relative w-full h-full min-h-0 mt-1">
                         <canvas id="mapPieChart"></canvas>
@@ -229,7 +203,7 @@
 
                 <div class="flex-1 bg-white border border-slate-200 rounded-xl p-3 md:p-4 flex flex-col shadow-md min-h-0" style="min-height: 200px;">
                     <h4 class="font-black text-slate-800 text-sm md:text-base border-b border-slate-200 pb-2 flex items-center gap-1.5 shrink-0">
-                        <span class="h-2.5 w-2.5 rounded-full bg-indigo-500"></span> รายงานสิ่งแวดล้อม
+                        <span class="h-2.5 w-2.5 rounded-full bg-indigo-500"></span> รายงานสิ่งแวดล้อม <span class="text-[10px] font-bold text-slate-400 ml-auto">(คลิกดูรายแขวงได้)</span>
                     </h4>
                     <div class="flex-1 relative w-full h-full min-h-0 mt-1">
                         <canvas id="envPieChart"></canvas>
@@ -240,35 +214,46 @@
         </div>
     </div>
 
+    <!-- ===== MODAL ===== -->
+    <div id="detailsModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50 transition-all">
+        <div class="bg-white rounded-2xl border border-slate-200 shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[85vh]">
+            <div class="px-6 py-4 border-b border-slate-100 flex justify-between items-center bg-slate-50">
+                <h3 id="modalTitle" class="text-sm md:text-md lg:text-lg font-black text-slate-800 flex items-center flex-wrap gap-1">
+                    <span class="h-3 w-1 bg-sky-500 rounded-full shrink-0"></span> รายละเอียดข้อมูลรายแขวง
+                </h3>
+                <button onclick="closeModal()" class="text-slate-400 hover:text-slate-600 hover:bg-slate-100 p-1.5 rounded-lg transition-colors shrink-0">
+                    <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div id="modalContainer" class="p-4 md:p-6 overflow-y-auto custom-scrollbar flex-1 bg-slate-50/50 space-y-4"></div>
+        </div>
+    </div>
+
     <script>
-        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzuEJ-eaApTTXpl8VSIN3FsQkKViRQjKyyACQ-bDZN6JN0meVDFth4Vjxlq2OzJ-5C8Bw/exec"; 
+        // ===== WEB APP URL =====
+        const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzuEJ-eaApTTXpl8VSIN3FsQkKViRQjKyyACQ-bDZN6JN0meVDFth4Vjxlq2OzJ-5C8Bw/exec";
 
         let shpChartInstance = null;
         let mapPieChartInstance = null;
         let envPieChartInstance = null;
 
         Chart.register(ChartDataLabels);
-
-        // ปรับ Chart.js ให้ responsive ตามขนาดหน้าจอ
         const isSmallScreen = window.innerWidth < 768;
         Chart.defaults.font.family = 'Sarabun';
         Chart.defaults.font.size = isSmallScreen ? 10 : 12;
         Chart.defaults.font.weight = '700';
         Chart.defaults.plugins.legend.labels.boxWidth = isSmallScreen ? 10 : 12;
 
+        // ===== Utility =====
         function createDiagonalPattern(color) {
             const canvas = document.createElement('canvas');
-            canvas.width = 10;
-            canvas.height = 10;
+            canvas.width = 10; canvas.height = 10;
             const ctx = canvas.getContext('2d');
             ctx.fillStyle = color;
             ctx.fillRect(0, 0, 10, 10);
-            ctx.strokeStyle = 'rgba(15, 23, 42, 0.4)'; 
+            ctx.strokeStyle = 'rgba(15, 23, 42, 0.4)';
             ctx.lineWidth = 2;
-            ctx.beginPath();
-            ctx.moveTo(0, 10);
-            ctx.lineTo(10, 0);
-            ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(0, 10); ctx.lineTo(10, 0); ctx.stroke();
             return ctx.createPattern(canvas, 'repeat');
         }
 
@@ -283,144 +268,182 @@
             return today.toLocaleDateString('th-TH', formatOptions);
         }
 
+        // ===== MAIN DASHBOARD =====
         async function initDashboard() {
             try {
                 const res = await fetch(WEB_APP_URL);
                 if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
                 const sheetData = await res.json();
-                
+
+                // === Summary row (ใช้ column index จากไฟล์ 2.html / 1.html — เหมือนกัน) ===
                 const summaryRow = sheetData.find(row => row[26] && (row[26].toString().includes("รวม") || row[26].toString().includes("Total")));
-                
+
                 if (summaryRow) {
+                    // --- วันที่ ---
                     const rawDateAC3 = summaryRow[28];
                     document.getElementById('custom-title-date').textContent = `วันที่ ${formatDisplayDate(rawDateAC3)}`;
 
+                    // --- Stat Cards ---
                     document.getElementById('total-requests').textContent = Number(summaryRow[27]).toLocaleString();
-                    
+
                     const shpComp = Number(summaryRow[29]);
-                    const shpRem = Number(summaryRow[30]);
+                    const shpRem  = Number(summaryRow[30]);
                     const shpTotal = shpComp + shpRem;
                     document.getElementById('shp-completed').textContent = shpComp.toLocaleString();
                     document.getElementById('shp-remaining').textContent = shpRem.toLocaleString();
                     document.getElementById('shp-percent').textContent = shpTotal > 0 ? ((shpComp / shpTotal) * 100).toFixed(1) + '%' : '0%';
 
-                    const mapReq = Number(summaryRow[32]);
+                    const mapReq  = Number(summaryRow[32]);
                     const mapComp = Number(summaryRow[35]);
-                    const mapRem = Number(summaryRow[36]);
+                    const mapRem  = Number(summaryRow[36]);
                     document.getElementById('map-total').textContent = mapReq.toLocaleString();
                     document.getElementById('map-completed').textContent = mapComp.toLocaleString();
                     document.getElementById('map-remaining').textContent = mapRem.toLocaleString();
                     document.getElementById('map-percent').textContent = mapReq > 0 ? ((mapComp / mapReq) * 100).toFixed(1) + '%' : '0%';
 
-                    const envTotal = Number(summaryRow[39]); 
-                    const envComp = Number(summaryRow[45]);
-                    const envRem = Number(summaryRow[46]);
+                    const envTotal = Number(summaryRow[39]);
+                    const envComp  = Number(summaryRow[45]);
+                    const envRem   = Number(summaryRow[46]);
                     document.getElementById('env-total').textContent = envTotal.toLocaleString();
                     document.getElementById('env-completed').textContent = envComp.toLocaleString();
                     document.getElementById('env-remaining').textContent = envRem.toLocaleString();
                     document.getElementById('env-percent').textContent = envTotal > 0 ? ((envComp / envTotal) * 100).toFixed(1) + '%' : '0%';
 
-                    const totalShpDate = Number(summaryRow[28]);
-                    document.getElementById('date-shp-total').textContent = `${totalShpDate.toLocaleString()} คำขอ`;
-                    
-                    const totalMapDate = Number(summaryRow[34]);
-                    document.getElementById('date-map-total').textContent = `${totalMapDate.toLocaleString()} คำขอ`;
-                    
-                    const totalEnvDraft = Number(summaryRow[40]); 
-                    const totalEnvComp = Number(summaryRow[42]);  
-                    let totalEnvRecv = 0; 
+                    // --- Panel Left (กรอบ 2): Shapefile badge ---
+                    const totalShpDate = Number(summaryRow[28]) || 0;
+                    const shpHdr     = document.getElementById('shp-box-header');
+                    const shpSubText = document.getElementById('date-shp-total-sub');
+                    const oldShpBadge = document.getElementById('dynamic-shp-badge');
+                    if (oldShpBadge) oldShpBadge.remove();
+                    if (totalShpDate > 0) {
+                        shpSubText.classList.add('hidden');
+                        const badge = document.createElement('span');
+                        badge.id = "dynamic-shp-badge";
+                        badge.textContent = `+ ${totalShpDate} คำขอ`;
+                        badge.className = "text-sm font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded border border-emerald-200 animate-pulse shrink-0";
+                        shpHdr.appendChild(badge);
+                    } else {
+                        shpSubText.textContent = "0 คำขอ";
+                        shpSubText.className = "text-xs text-slate-400 font-bold shrink-0";
+                        shpSubText.classList.remove('hidden');
+                    }
+
+                    // --- Panel Left: แผนที่ badge ---
+                    const totalMapDate = Number(summaryRow[34]) || 0;
+                    const mapHdr     = document.getElementById('map-box-header');
+                    const mapSubText = document.getElementById('date-map-total-sub');
+                    const oldMapBadge = document.getElementById('dynamic-map-badge');
+                    if (oldMapBadge) oldMapBadge.remove();
+                    if (totalMapDate > 0) {
+                        mapSubText.classList.add('hidden');
+                        const badge = document.createElement('span');
+                        badge.id = "dynamic-map-badge";
+                        badge.textContent = `+ ${totalMapDate} คำขอ`;
+                        badge.className = "text-sm font-black text-amber-500 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 animate-pulse shrink-0";
+                        mapHdr.appendChild(badge);
+                    } else {
+                        mapSubText.textContent = "0 คำขอ";
+                        mapSubText.className = "text-xs text-slate-400 font-bold shrink-0";
+                        mapSubText.classList.remove('hidden');
+                    }
+
+                    // --- Panel Left: สิ่งแวดล้อม badge ---
+                    const totalEnvDraft = Number(summaryRow[40]) || 0;
+                    const totalEnvComp2 = Number(summaryRow[42]) || 0;
+                    let totalEnvRecv = 0;
 
                     let shpHtml = "", mapHtml = "", envDraftHtml = "", envCompHtml = "", envRecvHtml = "";
-                    
                     sheetData.forEach(row => {
-                        if(row[26] && row[26].toString().startsWith("สทล.")) {
+                        if (row[26] && row[26].toString().startsWith("สทล.")) {
                             const stlName = row[26].toString();
-                            
                             const vShp = Number(row[28]) || 0;
-                            if(vShp > 0) shpHtml += `<div class="flex justify-between items-center border-b border-slate-800/40 py-0.5"><span>• ${stlName}</span><span class="text-emerald-400 font-extrabold">${vShp} คำขอ</span></div>`;
-                            
+                            if (vShp > 0) shpHtml += `<div class="flex justify-between items-center border-b border-slate-100 py-0.5 text-slate-600"><span>• ${stlName}</span><span class="text-emerald-600 font-extrabold">${vShp} คำขอ</span></div>`;
                             const vMap = Number(row[34]) || 0;
-                            if(vMap > 0) mapHtml += `<div class="flex justify-between items-center border-b border-slate-800/40 py-0.5"><span>• ${stlName}</span><span class="text-amber-400 font-extrabold">${vMap} คำขอ</span></div>`;
-                            
+                            if (vMap > 0) mapHtml += `<div class="flex justify-between items-center border-b border-slate-100 py-0.5 text-slate-600"><span>• ${stlName}</span><span class="text-amber-500 font-extrabold">${vMap} คำขอ</span></div>`;
                             const vEnvDraft = Number(row[40]) || 0;
-                            if(vEnvDraft > 0) envDraftHtml += `<div class="flex justify-between items-center py-0.5 text-slate-400"><span>- ${stlName}</span><span class="font-extrabold text-slate-200">${vEnvDraft} คำขอ</span></div>`;
-                            
+                            if (vEnvDraft > 0) envDraftHtml += `<div class="flex justify-between items-center py-0.5 text-slate-600"><span>- ${stlName}</span><span class="font-extrabold text-indigo-600">${vEnvDraft} คำขอ</span></div>`;
                             const vEnvComp = Number(row[42]) || 0;
-                            if(vEnvComp > 0) envCompHtml += `<div class="flex justify-between items-center py-0.5 text-slate-400"><span>- ${stlName}</span><span class="font-extrabold text-slate-200">${vEnvComp} คำขอ</span></div>`;
-
+                            if (vEnvComp > 0) envCompHtml += `<div class="flex justify-between items-center py-0.5 text-slate-600"><span>- ${stlName}</span><span class="font-extrabold text-indigo-600">${vEnvComp} คำขอ</span></div>`;
                             const vEnvRecv = Number(row[41]) || 0;
-                            if(vEnvRecv > 0) {
+                            if (vEnvRecv > 0) {
                                 totalEnvRecv += vEnvRecv;
-                                envRecvHtml += `<div class="flex justify-between items-center py-0.5 text-slate-400"><span>- ${stlName}</span><span class="font-extrabold text-slate-200">${vEnvRecv} คำขอ</span></div>`;
+                                envRecvHtml += `<div class="flex justify-between items-center py-0.5 text-slate-600"><span>- ${stlName}</span><span class="font-extrabold text-indigo-600">${vEnvRecv} คำขอ</span></div>`;
                             }
                         }
                     });
-                    
-                    document.getElementById('date-shp-list').innerHTML = shpHtml || '<div class="text-slate-500 text-center py-1">ไม่มีข้อมูล</div>';
-                    document.getElementById('date-map-list').innerHTML = mapHtml || '<div class="text-slate-500 text-center py-1">ไม่มีข้อมูล</div>';
-                    
-                    document.getElementById('sub-env-draft').textContent = `${totalEnvDraft} คำขอ`;
-                    document.getElementById('date-env-draft-list').innerHTML = envDraftHtml || '<div class="text-slate-600 pl-2">- ไม่มีข้อมูล</div>';
-                    
-                    document.getElementById('sub-env-comp').textContent = `${totalEnvComp} คำขอ`;
-                    document.getElementById('date-env-comp-list').innerHTML = envCompHtml || '<div class="text-slate-600 pl-2">- ไม่มีข้อมูล</div>';
-                    
-                    document.getElementById('sub-env-recv').textContent = `${totalEnvRecv} คำขอ`;
-                    document.getElementById('date-env-recv-list').innerHTML = envRecvHtml || '<div class="text-slate-600 pl-2">- ไม่มีข้อมูล</div>';
 
-                    document.getElementById('date-env-total').textContent = `${(totalEnvDraft + totalEnvComp + totalEnvRecv).toLocaleString()} คำขอ`;
+                    document.getElementById('date-shp-list').innerHTML = shpHtml;
+                    document.getElementById('date-map-list').innerHTML = mapHtml;
+
+                    const cList = document.getElementById('date-env-comp-list');
+                    if (totalEnvComp2 > 0) { cList.innerHTML = envCompHtml; cList.classList.remove('hidden'); } else { cList.classList.add('hidden'); }
+                    const dList = document.getElementById('date-env-draft-list');
+                    if (totalEnvDraft > 0) { dList.innerHTML = envDraftHtml; dList.classList.remove('hidden'); } else { dList.classList.add('hidden'); }
+                    const rList = document.getElementById('date-env-recv-list');
+                    if (totalEnvRecv > 0) { rList.innerHTML = envRecvHtml; rList.classList.remove('hidden'); } else { rList.classList.add('hidden'); }
+
+                    const totalEnvAll = totalEnvDraft + totalEnvComp2 + totalEnvRecv;
+                    const envHdr    = document.getElementById('env-box-header');
+                    const envSubAll = document.getElementById('date-env-total-sub');
+                    const oldEnvBadge = document.getElementById('dynamic-env-badge');
+                    if (oldEnvBadge) oldEnvBadge.remove();
+                    if (totalEnvAll > 0) {
+                        envSubAll.classList.add('hidden');
+                        const badge = document.createElement('span');
+                        badge.id = "dynamic-env-badge";
+                        badge.textContent = `+ ${totalEnvAll} คำขอ`;
+                        badge.className = "text-sm font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded border border-indigo-200 animate-pulse shrink-0";
+                        envHdr.appendChild(badge);
+                    } else {
+                        envSubAll.textContent = "0 คำขอ";
+                        envSubAll.className = "text-xs text-slate-400 font-bold shrink-0";
+                        envSubAll.classList.remove('hidden');
+                    }
                 }
 
+                // === Bar Chart: Shapefile (row[26]=ชื่อสทล. รวม, row[29]=เสร็จ, row[30]=เหลือ) ===
                 const labels = [];
                 const shpCompletedColors = [];
                 const shpCompletedDataset = [];
                 const shpRemainingDataset = [];
 
                 sheetData.forEach(row => {
-                    if(row[26] && row[26].toString().startsWith("สทล.")) {
-                        labels.push(row[26].toString()); 
+                    if (row[26] && row[26].toString().startsWith("สทล.")) {
+                        labels.push(row[26].toString());
                         const completedValue = Number(row[29]) || 0;
-                        const remainingValue = Number(row[30]) || 0;
-                        
+                        const remainingValue  = Number(row[30]) || 0;
                         shpCompletedDataset.push(completedValue);
                         shpRemainingDataset.push(remainingValue);
-
-                        if (remainingValue === 0 && completedValue > 0) {
-                            shpCompletedColors.push(createDiagonalPattern('#10b981')); 
-                        } else {
-                            shpCompletedColors.push('rgba(16, 185, 129, 0.65)'); 
-                        }
+                        shpCompletedColors.push(
+                            (remainingValue === 0 && completedValue > 0)
+                                ? createDiagonalPattern('#10b981')
+                                : 'rgba(16, 185, 129, 0.65)'
+                        );
                     }
                 });
 
                 const now = new Date();
                 document.getElementById('last-updated').textContent = `Sync: ${now.toLocaleTimeString('th-TH')} น.`;
 
-                // Render: กราฟแท่งความคืบหน้างาน Shapefile
                 const ctxShp = document.getElementById('shpChart').getContext('2d');
-                if(shpChartInstance) shpChartInstance.destroy();
+                if (shpChartInstance) shpChartInstance.destroy();
                 shpChartInstance = new Chart(ctxShp, {
                     type: 'bar',
                     data: {
                         labels: labels,
                         datasets: [
-                            { 
-                                label: 'เสร็จสะสม (ลายเส้นทแยง = เสร็จสมบูรณ์แล้ว)', 
-                                data: shpCompletedDataset, 
-                                backgroundColor: shpCompletedColors, 
-                                borderRadius: 2 
-                            },
-                            { 
-                                label: 'คงเหลือ', 
-                                data: shpRemainingDataset, 
-                                backgroundColor: '#f43f5e', 
-                                borderRadius: 2 
-                            }
+                            { label: 'เสร็จสะสม (ลายเส้นทแยง = เสร็จสมบูรณ์แล้ว)', data: shpCompletedDataset, backgroundColor: shpCompletedColors, borderRadius: 2 },
+                            { label: 'คงเหลือ', data: shpRemainingDataset, backgroundColor: '#f43f5e', borderRadius: 2 }
                         ]
                     },
                     options: {
                         responsive: true,
                         maintainAspectRatio: false,
+                        onClick: (event, elements) => {
+                            if (elements.length > 0) {
+                                showDetailModal('shapefile', labels[elements[0].index], elements[0].datasetIndex, sheetData);
+                            }
+                        },
                         plugins: {
                             legend: { position: 'top', labels: { color: '#1e293b', font: { size: isSmallScreen ? 10 : 12, weight: '800' }, boxWidth: 10 } },
                             datalabels: { display: false }
@@ -432,73 +455,55 @@
                     }
                 });
 
-                // Render: กราฟวงกลมแผนที่ประกอบคำขอ
+                // === Donut: แผนที่ ===
                 const ctxMap = document.getElementById('mapPieChart').getContext('2d');
-                if(mapPieChartInstance) mapPieChartInstance.destroy();
+                if (mapPieChartInstance) mapPieChartInstance.destroy();
                 const mComp = summaryRow ? Number(summaryRow[35]) : 0;
-                const mRem = summaryRow ? Number(summaryRow[36]) : 0;
+                const mRem  = summaryRow ? Number(summaryRow[36]) : 0;
                 mapPieChartInstance = new Chart(ctxMap, {
                     type: 'doughnut',
-                    data: {
-                        labels: ['เสร็จสะสม', 'คงเหลือ'],
-                        datasets: [{ data: [mComp, mRem], backgroundColor: ['#f59e0b', '#f43f5e'], borderWidth: 1, borderColor: '#ffffff' }]
-                    },
-                    options: { 
-                        responsive: true, 
-                        maintainAspectRatio: false, 
-                        layout: { padding: 6 },
-                        plugins: { 
-                            legend: { display: true, position: 'bottom', labels: { color: '#1e293b', font: { size: isSmallScreen ? 9 : 11 }, boxWidth: 10, padding: 4 } }, 
+                    data: { labels: ['เสร็จสะสม', 'คงเหลือ'], datasets: [{ data: [mComp, mRem], backgroundColor: ['#f59e0b', '#f43f5e'], borderWidth: 1, borderColor: '#ffffff' }] },
+                    options: {
+                        responsive: true, maintainAspectRatio: false, layout: { padding: 6 },
+                        onClick: (event, elements) => { if (elements.length > 0) showDetailModal('map', 'ทุกภูมิภาค', elements[0].index, sheetData); },
+                        plugins: {
+                            legend: { display: true, position: 'bottom', labels: { color: '#1e293b', font: { size: isSmallScreen ? 9 : 11 }, boxWidth: 10, padding: 4 } },
                             cutout: '55%',
                             datalabels: {
-                                display: true,
-                                color: '#ffffff',
-                                font: { weight: '900', size: isSmallScreen ? 9 : 11 },
+                                display: true, color: '#ffffff', font: { weight: '900', size: isSmallScreen ? 9 : 11 }, textAlign: 'center',
                                 formatter: (value, ctx) => {
-                                    let sum = 0;
-                                    let dataArr = ctx.chart.data.datasets[0].data;
-                                    dataArr.map(data => { sum += data; });
-                                    let percentage = sum > 0 ? ((value * 100) / sum).toFixed(1) + "%" : "0%";
-                                    return value > 0 ? `${value.toLocaleString()}\n(${percentage})` : '';
-                                },
-                                textAlign: 'center'
+                                    let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                    let pct = sum > 0 ? ((value * 100) / sum).toFixed(1) + "%" : "0%";
+                                    return value > 0 ? `${value.toLocaleString()}\n(${pct})` : '';
+                                }
                             }
-                        } 
+                        }
                     }
                 });
 
-                // Render: กราฟวงกลมรายงานสิ่งแวดล้อม
+                // === Donut: สิ่งแวดล้อม ===
                 const ctxEnv = document.getElementById('envPieChart').getContext('2d');
-                if(envPieChartInstance) envPieChartInstance.destroy();
+                if (envPieChartInstance) envPieChartInstance.destroy();
                 const eComp = summaryRow ? Number(summaryRow[45]) : 0;
-                const eRem = summaryRow ? Number(summaryRow[46]) : 0;
+                const eRem  = summaryRow ? Number(summaryRow[46]) : 0;
                 envPieChartInstance = new Chart(ctxEnv, {
                     type: 'doughnut',
-                    data: {
-                        labels: ['สมบูรณ์', 'คงเหลือ'],
-                        datasets: [{ data: [eComp, eRem], backgroundColor: ['#6366f1', '#f43f5e'], borderWidth: 1, borderColor: '#ffffff' }]
-                    },
-                    options: { 
-                        responsive: true, 
-                        maintainAspectRatio: false, 
-                        layout: { padding: 6 },
-                        plugins: { 
-                            legend: { display: true, position: 'bottom', labels: { color: '#1e293b', font: { size: isSmallScreen ? 9 : 11 }, boxWidth: 10, padding: 4 } }, 
+                    data: { labels: ['สมบูรณ์', 'คงเหลือ'], datasets: [{ data: [eComp, eRem], backgroundColor: ['#6366f1', '#f43f5e'], borderWidth: 1, borderColor: '#ffffff' }] },
+                    options: {
+                        responsive: true, maintainAspectRatio: false, layout: { padding: 6 },
+                        onClick: (event, elements) => { if (elements.length > 0) showDetailModal('environment', 'ทุกภูมิภาค', elements[0].index, sheetData); },
+                        plugins: {
+                            legend: { display: true, position: 'bottom', labels: { color: '#1e293b', font: { size: isSmallScreen ? 9 : 11 }, boxWidth: 10, padding: 4 } },
                             cutout: '55%',
                             datalabels: {
-                                display: true,
-                                color: '#ffffff',
-                                font: { weight: '900', size: isSmallScreen ? 9 : 11 },
+                                display: true, color: '#ffffff', font: { weight: '900', size: isSmallScreen ? 9 : 11 }, textAlign: 'center',
                                 formatter: (value, ctx) => {
-                                    let sum = 0;
-                                    let dataArr = ctx.chart.data.datasets[0].data;
-                                    dataArr.map(data => { sum += data; });
-                                    let percentage = sum > 0 ? ((value * 100) / sum).toFixed(1) + "%" : "0%";
-                                    return value > 0 ? `${value.toLocaleString()}\n(${percentage})` : '';
-                                },
-                                textAlign: 'center'
+                                    let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+                                    let pct = sum > 0 ? ((value * 100) / sum).toFixed(1) + "%" : "0%";
+                                    return value > 0 ? `${value.toLocaleString()}\n(${pct})` : '';
+                                }
                             }
-                        } 
+                        }
                     }
                 });
 
@@ -509,8 +514,85 @@
             }
         }
 
+        // ===== MODAL =====
+        // หมายเหตุ: Modal ใช้ column index จากไฟล์ 1.html (Sheet แรก)
+        // Modal: row[26]=ชื่อสทล., row[2]=ชื่อแขวง, targetColumn=ค่าแจกแจงรายแขวง
+        // shapefile: col 5 (เสร็จ), 6 (เหลือ)
+        // map:       col 11 (เสร็จ), 12 (เหลือ)
+        // env:       col 21 (สมบูรณ์), 22 (เหลือ)
+        function showDetailModal(chartType, scopeName, clickIndex, sheetData) {
+            const modal          = document.getElementById('detailsModal');
+            const modalTitle     = document.getElementById('modalTitle');
+            const modalContainer = document.getElementById('modalContainer');
+
+            let totalSum = 0, targetColumn = 0, statusLabel = "", colorClass = "", badgeClass = "";
+
+            if (chartType === 'shapefile') {
+                targetColumn = (clickIndex === 0) ? 5 : 6;
+                statusLabel  = (clickIndex === 0) ? "เสร็จสะสม" : "คงเหลือ";
+                colorClass   = (clickIndex === 0) ? "text-emerald-600" : "text-rose-500";
+                badgeClass   = (clickIndex === 0) ? "bg-emerald-50 text-emerald-700 border-emerald-200" : "bg-rose-50 text-rose-700 border-rose-200";
+                modalTitle.innerHTML = `<span class="h-3 w-1 bg-emerald-500 rounded-full"></span> งาน Shapefile ${statusLabel} ของ <span class="${colorClass} ml-1 font-black">${scopeName}</span>`;
+            } else if (chartType === 'map') {
+                targetColumn = (clickIndex === 0) ? 11 : 12;
+                statusLabel  = (clickIndex === 0) ? "เสร็จสะสม" : "คงเหลือ";
+                colorClass   = (clickIndex === 0) ? "text-amber-500" : "text-rose-500";
+                badgeClass   = (clickIndex === 0) ? "bg-amber-50 text-amber-700 border-amber-200" : "bg-rose-50 text-rose-700 border-rose-200";
+                modalTitle.innerHTML = `<span class="h-3 w-1 bg-amber-400 rounded-full"></span> แผนที่ประกอบคำขอ ${statusLabel} <span class="text-xs text-slate-400 font-normal ml-1">(รวมทุกภาค)</span>`;
+            } else if (chartType === 'environment') {
+                targetColumn = (clickIndex === 0) ? 21 : 22;
+                statusLabel  = (clickIndex === 0) ? "สมบูรณ์" : "คงเหลือ";
+                colorClass   = (clickIndex === 0) ? "text-indigo-600" : "text-rose-500";
+                badgeClass   = (clickIndex === 0) ? "bg-indigo-50 text-indigo-700 border-indigo-200" : "bg-rose-50 text-rose-700 border-rose-200";
+                modalTitle.innerHTML = `<span class="h-3 w-1 bg-indigo-500 rounded-full"></span> รายงานสิ่งแวดล้อม ${statusLabel} <span class="text-xs text-slate-400 font-normal ml-1">(รวมทุกภาค)</span>`;
+            }
+
+            let groupedData = {};
+            let lastSeenStl = "";
+
+            sheetData.forEach(row => {
+                // row[1] = ชื่อ สทล., row[2] = ชื่อแขวง (ตาม 1.html)
+                let currentStl = row[1] ? row[1].toString().trim() : "";
+                if (currentStl !== "") lastSeenStl = currentStl;
+
+                const rowDistrict = row[2] ? row[2].toString().trim() : "";
+                const val = Number(row[targetColumn]) || 0;
+
+                if (rowDistrict !== "" && !rowDistrict.includes("รวม") && !rowDistrict.includes("Total") && lastSeenStl !== "" && val > 0) {
+                    if (chartType === 'shapefile') {
+                        const stlNumber = scopeName.replace("สทล.", "").trim();
+                        if (!lastSeenStl.includes(stlNumber)) return;
+                    }
+                    totalSum += val;
+                    if (!groupedData[lastSeenStl]) groupedData[lastSeenStl] = { total: 0, districts: [] };
+                    groupedData[lastSeenStl].total += val;
+                    groupedData[lastSeenStl].districts.push({ name: rowDistrict, value: val });
+                }
+            });
+
+            let htmlBlocks = "";
+            if (Object.keys(groupedData).length === 0) {
+                htmlBlocks = `<div class="bg-white border border-slate-200 rounded-xl p-8 text-center text-slate-400 font-medium shadow-sm">ไม่มีรายการค้างคาหรือข้อมูลในส่วนนี้</div>`;
+            } else {
+                for (const [stlKey, stlGroup] of Object.entries(groupedData)) {
+                    let rowsHtml = "";
+                    stlGroup.districts.forEach(dist => {
+                        rowsHtml += `<div class="flex justify-between items-center py-2 border-b border-slate-100 last:border-0 pl-3"><div class="flex items-center gap-2 text-slate-700 font-medium"><span class="h-1.5 w-1.5 rounded-full bg-slate-300"></span><span>${dist.name}</span></div><span class="font-extrabold text-sm text-slate-800">${dist.value.toLocaleString()} คำขอ</span></div>`;
+                    });
+                    htmlBlocks += `<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden"><div class="bg-slate-100 px-4 py-2.5 flex justify-between items-center border-b border-slate-200"><span class="text-sm font-black text-slate-800">${stlKey}</span><span class="text-xs font-black px-2 py-0.5 rounded-md border ${badgeClass}">รวมกลุ่มนี้: ${stlGroup.total.toLocaleString()} คำขอ</span></div><div class="p-2 divide-y divide-slate-50 text-sm">${rowsHtml}</div></div>`;
+                }
+                htmlBlocks += `<div class="bg-slate-800 text-white rounded-xl p-4 flex justify-between items-center shadow-md"><span class="text-base font-black">รวมทุกแขวง</span><div class="text-right"><span class="text-xl md:text-2xl font-black">${totalSum.toLocaleString()}</span><span class="text-xs font-bold text-slate-300 ml-1">คำขอ</span></div></div>`;
+            }
+
+            modalContainer.innerHTML = htmlBlocks;
+            modal.classList.remove('hidden');
+        }
+
+        function closeModal() { document.getElementById('detailsModal').classList.add('hidden'); }
+        window.onclick = function(event) { const m = document.getElementById('detailsModal'); if (event.target === m) closeModal(); };
+
         initDashboard();
-        setInterval(initDashboard, 3600000); // ซิงค์ดึงข้อมูลใหม่ทุกๆ 1 ชั่วโมง
+        setInterval(initDashboard, 3600000);
     </script>
 </body>
 </html>
