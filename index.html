@@ -25,7 +25,16 @@
         }
         @media (max-width: 1023px) {
             body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
-            #panel-left { display: none; }
+            #main-content-row { flex-direction: column; }
+            #panel-left {
+                order: 99;
+                width: 100% !important;
+                max-height: 420px;
+                margin-top: 0.25rem;
+            }
+            #panel-left .flex-1.overflow-y-auto {
+                max-height: 340px;
+            }
         }
     </style>
 </head>
@@ -123,7 +132,7 @@
     </div>
 
     <!-- ===== MAIN CONTENT: LEFT PANEL (2) + RIGHT CONTENT (1) ===== -->
-    <div class="flex-1 flex flex-row gap-3 md:gap-4 lg:gap-5 min-h-0">
+    <div id="main-content-row" class="flex-1 flex flex-row gap-3 md:gap-4 lg:gap-5 min-h-0">
 
         <!-- ===== PANEL LEFT (กรอบ 2) - ความคืบหน้า จากไฟล์ 2.html ===== -->
         <div id="panel-left" class="w-[15%] bg-white border border-slate-200 rounded-xl p-3 md:p-4 flex flex-col shadow-md min-h-0 shrink-0">
