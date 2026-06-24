@@ -203,7 +203,7 @@
             <div class="w-full lg:w-[22%] flex flex-col justify-between gap-3 md:gap-4 min-h-0 shrink-0">
                 <div class="flex-1 bg-white border border-slate-200 rounded-xl p-3 md:p-4 flex flex-col shadow-md min-h-0" style="min-height: 200px;">
                     <h4 class="font-black text-slate-800 text-sm md:text-base border-b border-slate-200 pb-2 flex items-center gap-1.5 shrink-0">
-                        <span class="h-2.5 w-2.5 rounded-full bg-amber-400"></span> งานแผนที่คำขอ <span class="text-[10px] font-bold text-slate-400 ml-auto">(คลิกดูรายแขวงได้)</span>
+                        <span class="h-2.5 w-2.5 rounded-full bg-amber-400"></span> งานแผนที่คำขอ <span class="text-[10px] font-bold text-slate-400 ml-auto">(คลิกที่ชาร์ตเพื่อดูรายแขวง)</span>
                     </h4>
                     <div class="flex-1 relative w-full h-full min-h-0 mt-1">
                         <canvas id="mapPieChart"></canvas>
@@ -212,7 +212,7 @@
 
                 <div class="flex-1 bg-white border border-slate-200 rounded-xl p-3 md:p-4 flex flex-col shadow-md min-h-0" style="min-height: 200px;">
                     <h4 class="font-black text-slate-800 text-sm md:text-base border-b border-slate-200 pb-2 flex items-center gap-1.5 shrink-0">
-                        <span class="h-2.5 w-2.5 rounded-full bg-indigo-500"></span> รายงานสิ่งแวดล้อม <span class="text-[10px] font-bold text-slate-400 ml-auto">(คลิกดูรายแขวงได้)</span>
+                        <span class="h-2.5 w-2.5 rounded-full bg-indigo-500"></span> รายงานสิ่งแวดล้อม <span class="text-[10px] font-bold text-slate-400 ml-auto">(คลิกที่ชาร์ตเพื่อดูรายแขวง)</span>
                     </h4>
                     <div class="flex-1 relative w-full h-full min-h-0 mt-1">
                         <canvas id="envPieChart"></canvas>
@@ -547,13 +547,13 @@
                 statusLabel  = (clickIndex === 0) ? "เสร็จสะสม" : "คงเหลือ";
                 colorClass   = (clickIndex === 0) ? "text-amber-500" : "text-rose-500";
                 badgeClass   = (clickIndex === 0) ? "bg-amber-50 text-amber-700 border-amber-200" : "bg-rose-50 text-rose-700 border-rose-200";
-                modalTitle.innerHTML = `<span class="h-3 w-1 bg-amber-400 rounded-full"></span> แผนที่ประกอบคำขอ ${statusLabel} <span class="text-xs text-slate-400 font-normal ml-1">(รวมทุกภาค)</span>`;
+                modalTitle.innerHTML = `<span class="h-3 w-1 bg-amber-400 rounded-full"></span> แผนที่ประกอบคำขอ ${statusLabel} <span class="text-xs text-slate-400 font-normal ml-1">(รวมทุก สทล.)</span>`;
             } else if (chartType === 'environment') {
                 targetColumn = (clickIndex === 0) ? 21 : 22;
                 statusLabel  = (clickIndex === 0) ? "สมบูรณ์" : "คงเหลือ";
                 colorClass   = (clickIndex === 0) ? "text-indigo-600" : "text-rose-500";
                 badgeClass   = (clickIndex === 0) ? "bg-indigo-50 text-indigo-700 border-indigo-200" : "bg-rose-50 text-rose-700 border-rose-200";
-                modalTitle.innerHTML = `<span class="h-3 w-1 bg-indigo-500 rounded-full"></span> รายงานสิ่งแวดล้อม ${statusLabel} <span class="text-xs text-slate-400 font-normal ml-1">(รวมทุกภาค)</span>`;
+                modalTitle.innerHTML = `<span class="h-3 w-1 bg-indigo-500 rounded-full"></span> รายงานสิ่งแวดล้อม ${statusLabel} <span class="text-xs text-slate-400 font-normal ml-1">(รวมทุก สทล.)</span>`;
             }
 
             let groupedData = {};
