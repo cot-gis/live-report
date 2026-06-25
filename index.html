@@ -145,7 +145,7 @@
             
             <div class="flex-1 overflow-y-auto custom-scrollbar space-y-3.5 pr-0.5 text-xs font-bold">
                 <!-- Shapefile block -->
-                <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5">
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5 cursor-pointer hover:bg-emerald-50/60 hover:border-emerald-200 transition-colors" onclick="showDailyRequestModal('shapefile')">
                     <div id="shp-box-header" class="flex flex-row justify-between items-center text-emerald-600 font-black text-sm w-full">
                         <span>📦 Shapefile</span>
                         <span id="date-shp-total-sub" class="text-xs text-slate-400 font-bold shrink-0">0 คำขอ</span>
@@ -154,7 +154,7 @@
                 </div>
 
                 <!-- แผนที่/แผนผัง block -->
-                <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5">
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5 cursor-pointer hover:bg-amber-50/60 hover:border-amber-200 transition-colors" onclick="showDailyRequestModal('map')">
                     <div id="map-box-header" class="flex flex-row justify-between items-center text-amber-600 font-black text-sm w-full">
                         <span>🗺️ แผนที่/แผนผัง</span>
                         <span id="date-map-total-sub" class="text-xs text-slate-400 font-bold shrink-0">0 คำขอ</span>
@@ -163,7 +163,7 @@
                 </div>
 
                 <!-- สิ่งแวดล้อม block -->
-                <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5 flex flex-col min-h-0">
+                <div class="bg-slate-50 border border-slate-200 rounded-lg p-2.5 flex flex-col min-h-0 cursor-pointer hover:bg-indigo-50/60 hover:border-indigo-200 transition-colors" onclick="showDailyRequestModal('env')">
                     <div id="env-box-header" class="flex flex-row justify-between items-center text-indigo-600 font-black text-sm w-full border-b border-slate-200 pb-1.5">
                         <span>🍃 รายงานสิ่งแวดล้อม</span>
                         <span id="date-env-total-sub" class="text-xs text-slate-400 font-bold shrink-0">0 คำขอ</span>
@@ -245,6 +245,8 @@
         let shpChartInstance = null;
         let mapPieChartInstance = null;
         let envPieChartInstance = null;
+        let currentSheetData = []; // เก็บ sheetData ล่าสุดไว้ใช้กับโมดัลรายละเอียดคำขอรายวัน
+        let currentReportDate = null; // เก็บวันที่ที่แสดงในกรอบ "ความคืบหน้า" (จาก column AC) ไว้ใช้ filter
 
         Chart.register(ChartDataLabels);
         const isSmallScreen = window.innerWidth < 768;
@@ -283,6 +285,7 @@
                 const res = await fetch(WEB_APP_URL);
                 if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
                 const sheetData = await res.json();
+                currentSheetData = sheetData; // เก็บไว้ใช้กับโมดัลรายละเอียดคำขอรายวัน
 
                 // === Summary row (ใช้ column index จากไฟล์ 2.html / 1.html — เหมือนกัน) ===
                 const summaryRow = sheetData.find(row => row[26] && (row[26].toString().includes("รวม") || row[26].toString().includes("Total")));
@@ -290,6 +293,7 @@
                 if (summaryRow) {
                     // --- วันที่ ---
                     const rawDateAC3 = summaryRow[28];
+                    currentReportDate = rawDateAC3; // เก็บไว้ใช้ filter column X/AM/AD/AE/AF ในโมดัลรายละเอียดคำขอรายวัน
                     document.getElementById('custom-title-date').textContent = `วันที่ ${formatDisplayDate(rawDateAC3)}`;
 
                     // --- Stat Cards ---
@@ -594,6 +598,166 @@
             }
 
             modalContainer.innerHTML = htmlBlocks;
+            modal.classList.remove('hidden');
+        }
+
+        // ===== MODAL: รายละเอียดคำขอรายวัน (คลิกที่กรอบ "ความคืบหน้า" ฝั่งซ้าย) =====
+        // หมายเหตุ: ใช้ข้อมูลดิบรายคำขอจากชีทแรกของ sheetData เดียวกัน (แถวที่ไม่ใช่แถวสรุป/Pivot — คือแถวที่ col AA (index 26) ว่าง)
+        // คอลัมน์: I = สทล. (index 8), G = คำขอ (index 6)
+        // Shapefile = X (index 23), แผนที่/แผนผัง = AM (index 38)
+        // สิ่งแวดล้อม: ร่างส่งเขต = AD (index 29), รับจากแขวง = AE (index 30), สมบูรณ์ = AF (index 31)
+        // แต่ละคอลัมน์ข้างต้นเก็บ "วันที่" ของคำขอนั้นๆ จึงต้อง filter ให้ตรงกับวันที่ที่แสดงในกรอบความคืบหน้า (currentReportDate) เท่านั้น
+        function parseDateOnly(val) {
+            if (val === undefined || val === null || val.toString().trim() === "") return null;
+            const str = val.toString().trim();
+
+            // ลองแปลงตรงๆ ก่อน (เผื่อเป็น ISO string ที่ Apps Script ส่งมาจาก Date object)
+            let d = new Date(str);
+            if (!isNaN(d.getTime()) && d.getFullYear() > 1975) {
+                return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+            }
+
+            // เผื่อเป็นรูปแบบ d/m/yyyy หรือ dd-mm-yyyy (รองรับทั้ง ค.ศ. และ พ.ศ.)
+            const parts = str.split(/[\/\-]/);
+            if (parts.length === 3) {
+                let dd = parseInt(parts[0], 10);
+                let mm = parseInt(parts[1], 10);
+                let yyyy = parseInt(parts[2], 10);
+                if (yyyy > 2400) yyyy -= 543; // พ.ศ. -> ค.ศ.
+                if (!isNaN(dd) && !isNaN(mm) && !isNaN(yyyy)) {
+                    return new Date(yyyy, mm - 1, dd);
+                }
+            }
+            return null;
+        }
+
+        function isSameDay(valA, valB) {
+            const dA = parseDateOnly(valA);
+            const dB = parseDateOnly(valB);
+            if (!dA || !dB) return false;
+            return dA.getFullYear() === dB.getFullYear() && dA.getMonth() === dB.getMonth() && dA.getDate() === dB.getDate();
+        }
+
+        // แยกแค่ "วัน/เดือน" ออกมา รองรับทั้งรูปแบบสั้นไม่มีปี (เช่น "25/6") และวันที่เต็มรูปแบบ
+        function extractDayMonth(val) {
+            if (val === undefined || val === null) return null;
+            const str = val.toString().trim();
+            if (str === "") return null;
+
+            const parts = str.split(/[\/\-]/);
+            if (parts.length === 2) {
+                // รูปแบบสั้น d/m หรือ dd/mm ไม่มีปี เช่น "25/6"
+                const dd = parseInt(parts[0], 10);
+                const mm = parseInt(parts[1], 10);
+                if (!isNaN(dd) && !isNaN(mm)) return { day: dd, month: mm };
+                return null;
+            }
+
+            // ถ้าไม่ใช่รูปแบบสั้น ให้ลองแปลงเป็นวันที่เต็มรูปแบบแล้วดึงวัน/เดือนออกมา
+            const d = parseDateOnly(val);
+            if (d) return { day: d.getDate(), month: d.getMonth() + 1 };
+            return null;
+        }
+
+        // เทียบแค่ "วัน/เดือน" (ไม่สนปี) — ใช้กับ column X ที่กรอกแบบสั้น เช่น "25/6"
+        function isSameDayMonth(valA, valB) {
+            const a = extractDayMonth(valA);
+            const b = extractDayMonth(valB);
+            if (!a || !b) return false;
+            return a.day === b.day && a.month === b.month;
+        }
+
+        function buildDailyRequestRows(colIndex) {
+            const rows = [];
+            console.log("=== DEBUG buildDailyRequestRows colIndex=" + colIndex + " ===");
+            console.log("currentReportDate (raw):", currentReportDate, "| typeof:", typeof currentReportDate);
+            console.log("currentSheetData.length:", currentSheetData.length);
+            if (currentSheetData.length > 0) {
+                console.log("ตัวอย่างแถวที่ 0 ทั้งแถว:", currentSheetData[0]);
+                console.log("ตัวอย่างแถวที่ 1 ทั้งแถว (ถ้ามี):", currentSheetData[1]);
+                console.log("ความยาวแถวที่ 1:", currentSheetData[1] ? currentSheetData[1].length : "n/a");
+            }
+            let debugCount = 0;
+            let nonEmptyAACount = 0;
+            currentSheetData.forEach((row, idx) => {
+                // ข้ามแถวสรุป/Pivot (แถวที่มีคำว่า "สทล." หรือ "รวม"/"Total" อยู่ใน col AA)
+                const aaVal = row[26] ? row[26].toString().trim() : "";
+                if (aaVal !== "") { nonEmptyAACount++; return; }
+
+                const cellVal = row[colIndex];
+                if (debugCount < 8 && cellVal !== undefined && cellVal !== null && cellVal.toString().trim() !== "") {
+                    debugCount++;
+                    console.log("แถว #" + idx + " ตัวอย่างค่าในคอลัมน์ " + colIndex + " (raw):", cellVal, "| typeof:", typeof cellVal, "| isSameDayMonth:", isSameDayMonth(cellVal, currentReportDate));
+                }
+
+                // เทียบวัน/เดือนของคอลัมน์นี้ (X / AM / AD / AE / AF) กับวันที่ที่แสดงในกรอบความคืบหน้า (currentReportDate)
+                if (!isSameDayMonth(cellVal, currentReportDate)) return;
+
+                const stlName = row[8] ? row[8].toString().trim() : "ไม่ระบุ สทล.";
+                const reqNo   = row[6] ? row[6].toString().trim() : "-";
+                if (stlName === "" ) return;
+                rows.push({ stl: stlName, req: reqNo });
+            });
+            console.log("แถวที่เป็น summary/pivot (aaVal ไม่ว่าง):", nonEmptyAACount, "| ผลลัพธ์ที่ผ่านการกรอง:", rows.length);
+            return rows;
+        }
+
+        function renderDailyRequestGroup(rows, badgeClass) {
+            if (rows.length === 0) return "";
+            const grouped = {};
+            rows.forEach(r => {
+                if (!grouped[r.stl]) grouped[r.stl] = [];
+                grouped[r.stl].push(r.req);
+            });
+            let html = "";
+            for (const [stlKey, reqList] of Object.entries(grouped)) {
+                const itemsHtml = reqList.map(req => `<div class="flex items-center gap-2 py-1.5 border-b border-slate-100 last:border-0 pl-3 text-slate-700 font-medium"><span class="h-1.5 w-1.5 rounded-full bg-slate-300"></span><span>คำขอ: ${req}</span></div>`).join("");
+                html += `<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden"><div class="bg-slate-100 px-4 py-2.5 flex justify-between items-center border-b border-slate-200"><span class="text-sm font-black text-slate-800">${stlKey}</span><span class="text-xs font-black px-2 py-0.5 rounded-md border ${badgeClass}">${reqList.length.toLocaleString()} คำขอ</span></div><div class="p-2 divide-y divide-slate-50 text-sm">${itemsHtml}</div></div>`;
+            }
+            return html;
+        }
+
+        function showDailyRequestModal(category) {
+            const modal          = document.getElementById('detailsModal');
+            const modalTitle     = document.getElementById('modalTitle');
+            const modalContainer = document.getElementById('modalContainer');
+
+            let bodyHtml = "";
+            let totalCount = 0;
+
+            if (category === 'shapefile') {
+                modalTitle.innerHTML = `<span class="h-3 w-1 bg-emerald-500 rounded-full"></span> รายละเอียดคำขอ Shapefile ของวันนี้`;
+                const rows = buildDailyRequestRows(23);
+                totalCount = rows.length;
+                bodyHtml = renderDailyRequestGroup(rows, "bg-emerald-50 text-emerald-700 border-emerald-200");
+            } else if (category === 'map') {
+                modalTitle.innerHTML = `<span class="h-3 w-1 bg-amber-400 rounded-full"></span> รายละเอียดคำขอแผนที่/แผนผัง ของวันนี้`;
+                const rows = buildDailyRequestRows(38);
+                totalCount = rows.length;
+                bodyHtml = renderDailyRequestGroup(rows, "bg-amber-50 text-amber-700 border-amber-200");
+            } else if (category === 'env') {
+                modalTitle.innerHTML = `<span class="h-3 w-1 bg-indigo-500 rounded-full"></span> รายละเอียดคำขอรายงานสิ่งแวดล้อม ของวันนี้`;
+                const draftRows = buildDailyRequestRows(29);
+                const recvRows  = buildDailyRequestRows(30);
+                const compRows  = buildDailyRequestRows(31);
+                totalCount = draftRows.length + recvRows.length + compRows.length;
+
+                const draftHtml = renderDailyRequestGroup(draftRows, "bg-indigo-50 text-indigo-700 border-indigo-200");
+                const recvHtml  = renderDailyRequestGroup(recvRows,  "bg-indigo-50 text-indigo-700 border-indigo-200");
+                const compHtml  = renderDailyRequestGroup(compRows,  "bg-indigo-50 text-indigo-700 border-indigo-200");
+
+                if (draftHtml) bodyHtml += `<div class="text-xs font-black text-slate-400 uppercase tracking-wider mb-1.5">• ร่างส่งเขต</div><div class="space-y-2">${draftHtml}</div>`;
+                if (recvHtml)  bodyHtml += `<div class="text-xs font-black text-slate-400 uppercase tracking-wider mb-1.5 ${draftHtml ? 'mt-4' : ''}">• รับจากแขวง</div><div class="space-y-2">${recvHtml}</div>`;
+                if (compHtml)  bodyHtml += `<div class="text-xs font-black text-slate-400 uppercase tracking-wider mb-1.5 ${(draftHtml || recvHtml) ? 'mt-4' : ''}">• สมบูรณ์</div><div class="space-y-2">${compHtml}</div>`;
+            }
+
+            if (!bodyHtml) {
+                bodyHtml = `<div class="bg-white border border-slate-200 rounded-xl p-8 text-center text-slate-400 font-medium shadow-sm">ไม่มีรายการคำขอใหม่ในวันนี้</div>`;
+            }
+
+            bodyHtml += `<div class="bg-slate-800 text-white rounded-xl p-4 flex justify-between items-center shadow-md mt-2"><span class="text-base font-black">รวมคำขอวันนี้</span><div class="text-right"><span class="text-xl md:text-2xl font-black">${totalCount.toLocaleString()}</span><span class="text-xs font-bold text-slate-300 ml-1">คำขอ</span></div></div>`;
+
+            modalContainer.innerHTML = bodyHtml;
             modal.classList.remove('hidden');
         }
 
