@@ -284,17 +284,20 @@
             try {
                 const res = await fetch(WEB_APP_URL);
                 if (!res.ok) throw new Error("ดึงข้อมูลไม่สำเร็จ");
-                const sheetData = await res.json();
-                currentSheetData = sheetData; // เก็บไว้ใช้กับโมดัลรายละเอียดคำขอรายวัน
+                const result = await res.json();
+
+                // โครงสร้างข้อมูลใหม่จาก Apps Script: { summary: [...], raw: [...] }
+                const sheetData = result.summary || [];
+                currentSheetData = result.raw || []; // ข้อมูลดิบรายคำขอ (ชีท "รวมคำขอ") ใช้กับโมดัลรายละเอียดคำขอรายวัน
 
                 // === Summary row (ใช้ column index จากไฟล์ 2.html / 1.html — เหมือนกัน) ===
                 const summaryRow = sheetData.find(row => row[26] && (row[26].toString().includes("รวม") || row[26].toString().includes("Total")));
 
                 if (summaryRow) {
                     // --- วันที่ ---
-                    const rawDateAC3 = summaryRow[28];
-                    currentReportDate = rawDateAC3; // เก็บไว้ใช้ filter column X/AM/AD/AE/AF ในโมดัลรายละเอียดคำขอรายวัน
-                    document.getElementById('custom-title-date').textContent = `วันที่ ${formatDisplayDate(rawDateAC3)}`;
+                    // ใช้วันที่ปัจจุบันจริงของระบบเป็นวันที่อ้างอิงในกรอบ "ความคืบหน้า" (ไม่ใช้ค่าจากชีทสรุปอีกต่อไป เพราะคอลัมน์นั้นไม่ใช่วันที่)
+                    currentReportDate = new Date();
+                    document.getElementById('custom-title-date').textContent = `วันที่ ${formatDisplayDate(currentReportDate)}`;
 
                     // --- Stat Cards ---
                     document.getElementById('total-requests').textContent = Number(summaryRow[27]).toLocaleString();
@@ -607,9 +610,27 @@
         // Shapefile = X (index 23), แผนที่/แผนผัง = AM (index 38)
         // สิ่งแวดล้อม: ร่างส่งเขต = AD (index 29), รับจากแขวง = AE (index 30), สมบูรณ์ = AF (index 31)
         // แต่ละคอลัมน์ข้างต้นเก็บ "วันที่" ของคำขอนั้นๆ จึงต้อง filter ให้ตรงกับวันที่ที่แสดงในกรอบความคืบหน้า (currentReportDate) เท่านั้น
+        const THAI_MONTHS = {"ม.ค.":1,"ก.พ.":2,"มี.ค.":3,"เม.ย.":4,"พ.ค.":5,"มิ.ย.":6,"ก.ค.":7,"ส.ค.":8,"ก.ย.":9,"ต.ค.":10,"พ.ย.":11,"ธ.ค.":12};
+
+        function parseThaiAbbrevDate(str) {
+            // รูปแบบ "24 เม.ย. 2026" หรือ "4 เม.ย. 2026"
+            const m = str.match(/^(\d{1,2})\s+([ก-ฮ\.]+)\s+(\d{4})$/);
+            if (!m) return null;
+            const dd = parseInt(m[1], 10);
+            const mm = THAI_MONTHS[m[2]];
+            let yyyy = parseInt(m[3], 10);
+            if (!mm) return null;
+            if (yyyy > 2400) yyyy -= 543; // เผื่อเป็น พ.ศ.
+            return new Date(yyyy, mm - 1, dd);
+        }
+
         function parseDateOnly(val) {
             if (val === undefined || val === null || val.toString().trim() === "") return null;
             const str = val.toString().trim();
+
+            // เผื่อเป็นรูปแบบไทย เช่น "24 เม.ย. 2026"
+            const thaiD = parseThaiAbbrevDate(str);
+            if (thaiD) return thaiD;
 
             // ลองแปลงตรงๆ ก่อน (เผื่อเป็น ISO string ที่ Apps Script ส่งมาจาก Date object)
             let d = new Date(str);
@@ -669,52 +690,65 @@
 
         function buildDailyRequestRows(colIndex) {
             const rows = [];
-            console.log("=== DEBUG buildDailyRequestRows colIndex=" + colIndex + " ===");
-            console.log("currentReportDate (raw):", currentReportDate, "| typeof:", typeof currentReportDate);
-            console.log("currentSheetData.length:", currentSheetData.length);
-            if (currentSheetData.length > 0) {
-                console.log("ตัวอย่างแถวที่ 0 ทั้งแถว:", currentSheetData[0]);
-                console.log("ตัวอย่างแถวที่ 1 ทั้งแถว (ถ้ามี):", currentSheetData[1]);
-                console.log("ความยาวแถวที่ 1:", currentSheetData[1] ? currentSheetData[1].length : "n/a");
-            }
-            let debugCount = 0;
-            let nonEmptyAACount = 0;
             currentSheetData.forEach((row, idx) => {
-                // ข้ามแถวสรุป/Pivot (แถวที่มีคำว่า "สทล." หรือ "รวม"/"Total" อยู่ใน col AA)
-                const aaVal = row[26] ? row[26].toString().trim() : "";
-                if (aaVal !== "") { nonEmptyAACount++; return; }
+                if (idx === 0) return; // ข้ามแถวหัวตาราง (row 1 ของชีท)
+
+                const reqNo   = row[6] ? row[6].toString().trim() : "";
+                const stlName = row[8] ? row[8].toString().trim() : "";
+                const khwaeng = row[9] ? row[9].toString().trim() : "ไม่ระบุแขวง";
+                if (!reqNo || !stlName) return; // ข้ามแถวที่ไม่มีคำขอ/สทล. (แถวว่างหรือแถวหัวตาราง)
 
                 const cellVal = row[colIndex];
-                if (debugCount < 8 && cellVal !== undefined && cellVal !== null && cellVal.toString().trim() !== "") {
-                    debugCount++;
-                    console.log("แถว #" + idx + " ตัวอย่างค่าในคอลัมน์ " + colIndex + " (raw):", cellVal, "| typeof:", typeof cellVal, "| isSameDayMonth:", isSameDayMonth(cellVal, currentReportDate));
-                }
 
                 // เทียบวัน/เดือนของคอลัมน์นี้ (X / AM / AD / AE / AF) กับวันที่ที่แสดงในกรอบความคืบหน้า (currentReportDate)
                 if (!isSameDayMonth(cellVal, currentReportDate)) return;
 
-                const stlName = row[8] ? row[8].toString().trim() : "ไม่ระบุ สทล.";
-                const reqNo   = row[6] ? row[6].toString().trim() : "-";
-                if (stlName === "" ) return;
-                rows.push({ stl: stlName, req: reqNo });
+                rows.push({ stl: stlName, khwaeng: khwaeng, req: reqNo });
             });
-            console.log("แถวที่เป็น summary/pivot (aaVal ไม่ว่าง):", nonEmptyAACount, "| ผลลัพธ์ที่ผ่านการกรอง:", rows.length);
             return rows;
         }
+
+        let dailyGroupToggleCounter = 0; // ใช้สร้าง id ไม่ซ้ำกันสำหรับปุ่ม +/- ของแต่ละกลุ่ม
 
         function renderDailyRequestGroup(rows, badgeClass) {
             if (rows.length === 0) return "";
             const grouped = {};
             rows.forEach(r => {
-                if (!grouped[r.stl]) grouped[r.stl] = [];
-                grouped[r.stl].push(r.req);
+                const key = r.stl + "‖" + r.khwaeng;
+                if (!grouped[key]) grouped[key] = { stl: r.stl, khwaeng: r.khwaeng, reqList: [] };
+                grouped[key].reqList.push(r.req);
             });
             let html = "";
-            for (const [stlKey, reqList] of Object.entries(grouped)) {
-                const itemsHtml = reqList.map(req => `<div class="flex items-center gap-2 py-1.5 border-b border-slate-100 last:border-0 pl-3 text-slate-700 font-medium"><span class="h-1.5 w-1.5 rounded-full bg-slate-300"></span><span>คำขอ: ${req}</span></div>`).join("");
-                html += `<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden"><div class="bg-slate-100 px-4 py-2.5 flex justify-between items-center border-b border-slate-200"><span class="text-sm font-black text-slate-800">${stlKey}</span><span class="text-xs font-black px-2 py-0.5 rounded-md border ${badgeClass}">${reqList.length.toLocaleString()} คำขอ</span></div><div class="p-2 divide-y divide-slate-50 text-sm">${itemsHtml}</div></div>`;
+            for (const group of Object.values(grouped)) {
+                dailyGroupToggleCounter++;
+                const groupId = "daily-group-" + dailyGroupToggleCounter;
+                const itemsHtml = group.reqList.map(req => `<div class="flex items-center gap-2 py-1.5 border-b border-slate-100 last:border-0 pl-3 text-slate-700 font-medium"><span class="h-1.5 w-1.5 rounded-full bg-slate-300"></span><span>คำขอ: ${req}</span></div>`).join("");
+                html += `<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
+                    <div class="px-4 py-2.5 flex justify-between items-center border-b border-slate-200 bg-slate-100">
+                        <div class="min-w-0">
+                            <span class="text-sm font-black text-slate-800 block truncate">${group.stl}</span>
+                            <span class="text-xs font-bold text-slate-500 block truncate">แขวง: ${group.khwaeng}</span>
+                        </div>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <span class="text-xs font-black px-2 py-0.5 rounded-md border ${badgeClass}">${group.reqList.length.toLocaleString()} คำขอ</span>
+                            <button type="button" onclick="toggleDailyGroup('${groupId}')" class="h-6 w-6 flex items-center justify-center rounded-md border border-slate-300 bg-white text-slate-600 font-black hover:bg-slate-50 transition-colors shrink-0" aria-label="แสดง/ซ่อนรายการคำขอ">
+                                <span id="${groupId}-icon">+</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div id="${groupId}" class="hidden p-2 divide-y divide-slate-50 text-sm">${itemsHtml}</div>
+                </div>`;
             }
             return html;
+        }
+
+        function toggleDailyGroup(groupId) {
+            const el   = document.getElementById(groupId);
+            const icon = document.getElementById(groupId + "-icon");
+            if (!el) return;
+            const isHidden = el.classList.contains('hidden');
+            el.classList.toggle('hidden');
+            if (icon) icon.textContent = isHidden ? "−" : "+";
         }
 
         function showDailyRequestModal(category) {
