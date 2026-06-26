@@ -76,12 +76,12 @@
                 <span class="text-xs md:text-sm lg:text-base font-black text-emerald-600 uppercase tracking-wider block truncate">2. งาน Shapefile</span>
                 <span id="shp-percent" class="text-xs md:text-sm font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 shadow-sm">-%</span>
             </div>
-            <div class="grid grid-cols-2 gap-2 mt-auto border-t border-slate-200 pt-1.5">
+            <div class="grid grid-cols-2 gap-2 mt-auto border-t border-slate-200 pt-1.5 text-center">
                 <div class="truncate">
                     <span class="text-xs uppercase font-black tracking-wider text-slate-400 block mb-0.5">เสร็จสะสม</span>
                     <span id="shp-completed" class="text-2xl md:text-3xl font-black text-emerald-600 leading-none">-</span>
                 </div>
-                <div class="border-l border-slate-200 pl-2 truncate">
+                <div class="border-l border-slate-200 truncate">
                     <span class="text-xs uppercase font-black tracking-wider text-slate-400 block mb-0.5">คงเหลือ</span>
                     <span id="shp-remaining" class="text-2xl md:text-3xl font-black text-rose-500 leading-none">-</span>
                 </div>
@@ -94,7 +94,7 @@
                 <span id="map-percent" class="text-xs md:text-sm font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 shadow-sm">-%</span>
             </div>
             <div class="grid grid-cols-3 gap-1 mt-auto border-t border-slate-200 pt-1.5 text-center">
-                <div class="truncate text-left">
+                <div class="truncate">
                     <span class="text-xs font-black text-slate-400 block mb-0.5">ต้องทำ</span>
                     <span id="map-total" class="text-base sm:text-lg md:text-3xl font-black text-slate-800 leading-none">-</span>
                 </div>
@@ -102,7 +102,7 @@
                     <span class="text-xs font-black text-amber-600 block mb-0.5">เสร็จ</span>
                     <span id="map-completed" class="text-base sm:text-lg md:text-3xl font-black text-amber-600 leading-none">-</span>
                 </div>
-                <div class="border-l border-slate-200 pl-1 truncate text-right">
+                <div class="border-l border-slate-200 pl-1 truncate">
                     <span class="text-xs font-black text-rose-500 block mb-0.5">เหลือ</span>
                     <span id="map-remaining" class="text-base sm:text-lg md:text-3xl font-black text-rose-500 leading-none">-</span>
                 </div>
@@ -115,17 +115,29 @@
                 <span id="env-percent" class="text-xs md:text-sm font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200 shadow-sm">-%</span>
             </div>
             <div class="grid grid-cols-3 gap-1 mt-auto border-t border-slate-200 pt-1.5 text-center">
-                <div class="truncate text-left">
+                <div class="truncate">
                     <span class="text-xs font-black text-slate-400 block mb-0.5">ต้องทำ</span>
                     <span id="env-total" class="text-base sm:text-lg md:text-3xl font-black text-slate-800 leading-none">-</span>
+                    <div class="flex justify-center gap-3 md:gap-4 mt-0.5 text-[10px] md:text-xs font-bold text-slate-400">
+                        <span>EAR: <span id="env-total-ear" class="text-slate-600 font-black">-</span></span>
+                        <span>EC: <span id="env-total-ec" class="text-slate-600 font-black">-</span></span>
+                    </div>
                 </div>
                 <div class="border-l border-slate-200 pl-1 truncate">
                     <span class="text-xs font-black text-indigo-600 block mb-0.5">สมบูรณ์</span>
                     <span id="env-completed" class="text-base sm:text-lg md:text-3xl font-black text-indigo-600 leading-none">-</span>
+                    <div class="flex justify-center gap-3 md:gap-4 mt-0.5 text-[10px] md:text-xs font-bold text-indigo-400">
+                        <span>EAR: <span id="env-completed-ear" class="text-indigo-600 font-black">-</span></span>
+                        <span>EC: <span id="env-completed-ec" class="text-indigo-600 font-black">-</span></span>
+                    </div>
                 </div>
-                <div class="border-l border-slate-200 pl-1 truncate text-right">
+                <div class="border-l border-slate-200 pl-1 truncate">
                     <span class="text-xs font-black text-rose-500 block mb-0.5">เหลือ</span>
                     <span id="env-remaining" class="text-base sm:text-lg md:text-3xl font-black text-rose-500 leading-none">-</span>
+                    <div class="flex justify-center gap-3 md:gap-4 mt-0.5 text-[10px] md:text-xs font-bold text-rose-400">
+                        <span>EAR: <span id="env-remaining-ear" class="text-rose-500 font-black">-</span></span>
+                        <span>EC: <span id="env-remaining-ec" class="text-rose-500 font-black">-</span></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -200,7 +212,7 @@
             </div>
 
             <!-- Donut charts: แผนที่ + สิ่งแวดล้อม -->
-            <div class="w-full lg:w-[22%] flex flex-col justify-between gap-3 md:gap-4 min-h-0 shrink-0">
+            <div class="w-full lg:w-[32%] flex flex-col justify-between gap-3 md:gap-4 min-h-0 shrink-0">
                 <div class="flex-1 bg-white border border-slate-200 rounded-xl p-3 md:p-4 flex flex-col shadow-md min-h-0" style="min-height: 200px;">
                     <h4 class="font-black text-slate-800 text-sm md:text-base border-b border-slate-200 pb-2 flex items-center gap-1.5 shrink-0">
                         <span class="h-2.5 w-2.5 rounded-full bg-amber-400"></span> งานแผนที่คำขอ <span class="text-[10px] font-bold text-slate-400 ml-auto">(คลิกที่ชาร์ตเพื่อดูรายแขวง)</span>
@@ -279,6 +291,18 @@
             return today.toLocaleDateString('th-TH', formatOptions);
         }
 
+        // ใช้สำหรับการ์ด "รายงานสิ่งแวดล้อม" ที่ดึง % มาจากเซลล์ในชีทตรงๆ (AT25)
+        // รองรับทั้งกรณีเซลล์เก็บเป็นข้อความ "20.9%" สำเร็จรูป, ตัวเลข 20.9, หรือเศษส่วนทศนิยม 0.209
+        function formatPercentCell(val) {
+            if (val === undefined || val === null || val.toString().trim() === "") return "0%";
+            const str = val.toString().trim();
+            if (str.includes('%')) return str;
+            const num = parseFloat(str.replace(',', '.'));
+            if (isNaN(num)) return "0%";
+            const pct = (num > 0 && num <= 1) ? num * 100 : num;
+            return pct.toFixed(1) + "%";
+        }
+
         // ===== MAIN DASHBOARD =====
         async function initDashboard() {
             try {
@@ -292,6 +316,12 @@
 
                 // === Summary row (ใช้ column index จากไฟล์ 2.html / 1.html — เหมือนกัน) ===
                 const summaryRow = sheetData.find(row => row[26] && (row[26].toString().includes("รวม") || row[26].toString().includes("Total")));
+
+                // === แถวข้อมูลสำหรับการ์ด "รายงานสิ่งแวดล้อม" (อ้างอิงเซลล์ตรงตามที่ระบุ) ===
+                // index 0 = แถวหัวตาราง (แถวที่ 1 ในชีท) => แถวที่ N ในชีท = index (N-1)
+                const envRow24  = sheetData[23];  // แถวที่ 24: ต้องทำ(AN), EAR ต้องทำ(AL), EC ต้องทำ(AM), สมบูรณ์(AT), เหลือ(AU)
+                const envRow25  = sheetData[24];  // แถวที่ 25: % (AT)
+                const envRow110 = sheetData[109]; // แถวที่ 110: EAR/EC สมบูรณ์(AY,AZ), EAR/EC เหลือ(BA,BB)
 
                 if (summaryRow) {
                     // --- วันที่ ---
@@ -317,13 +347,33 @@
                     document.getElementById('map-remaining').textContent = mapRem.toLocaleString();
                     document.getElementById('map-percent').textContent = mapReq > 0 ? ((mapComp / mapReq) * 100).toFixed(1) + '%' : '0%';
 
-                    const envTotal = Number(summaryRow[39]);
-                    const envComp  = Number(summaryRow[45]);
-                    const envRem   = Number(summaryRow[46]);
+                    // ต้องทำ = AN24, สมบูรณ์ = AT24, เหลือ = AU24
+                    const envTotal = envRow24 ? (Number(envRow24[39]) || 0) : 0;
+                    const envComp  = envRow24 ? (Number(envRow24[45]) || 0) : 0;
+                    const envRem   = envRow24 ? (Number(envRow24[46]) || 0) : 0;
                     document.getElementById('env-total').textContent = envTotal.toLocaleString();
                     document.getElementById('env-completed').textContent = envComp.toLocaleString();
                     document.getElementById('env-remaining').textContent = envRem.toLocaleString();
-                    document.getElementById('env-percent').textContent = envTotal > 0 ? ((envComp / envTotal) * 100).toFixed(1) + '%' : '0%';
+
+                    // % = AT25 (ดึงค่าจากเซลล์ตรง รองรับทั้งรูปแบบที่เก็บเป็น % สำเร็จรูป หรือเป็นเศษส่วนทศนิยม)
+                    document.getElementById('env-percent').textContent = formatPercentCell(envRow25 ? envRow25[45] : null);
+
+                    // --- ย่อย EAR/EC ของรายงานสิ่งแวดล้อม ---
+                    // ต้องทำ:   AL24 (index 37) = EAR, AM24 (index 38) = EC
+                    // สมบูรณ์:  AY110 (index 50) = EAR, AZ110 (index 51) = EC
+                    // เหลือ:    BA110 (index 52) = EAR, BB110 (index 53) = EC
+                    const envTotalEar = envRow24  ? (Number(envRow24[37])  || 0) : 0;
+                    const envTotalEc  = envRow24  ? (Number(envRow24[38])  || 0) : 0;
+                    const envCompEar  = envRow110 ? (Number(envRow110[50]) || 0) : 0;
+                    const envCompEc   = envRow110 ? (Number(envRow110[51]) || 0) : 0;
+                    const envRemEar   = envRow110 ? (Number(envRow110[52]) || 0) : 0;
+                    const envRemEc    = envRow110 ? (Number(envRow110[53]) || 0) : 0;
+                    document.getElementById('env-total-ear').textContent = envTotalEar.toLocaleString();
+                    document.getElementById('env-total-ec').textContent  = envTotalEc.toLocaleString();
+                    document.getElementById('env-completed-ear').textContent = envCompEar.toLocaleString();
+                    document.getElementById('env-completed-ec').textContent  = envCompEc.toLocaleString();
+                    document.getElementById('env-remaining-ear').textContent = envRemEar.toLocaleString();
+                    document.getElementById('env-remaining-ec').textContent  = envRemEc.toLocaleString();
 
                     // --- Panel Left (กรอบ 2): Shapefile badge ---
                     const totalShpDate = Number(summaryRow[28]) || 0;
@@ -483,8 +533,8 @@
                         responsive: true, maintainAspectRatio: false, layout: { padding: 6 },
                         onClick: (event, elements) => { if (elements.length > 0) showDetailModal('map', 'ทุกภูมิภาค', elements[0].index, sheetData); },
                         plugins: {
-                            legend: { display: true, position: 'bottom', labels: { color: '#1e293b', font: { size: isSmallScreen ? 9 : 11 }, boxWidth: 10, padding: 4 } },
-                            cutout: '55%',
+                            legend: { display: true, position: 'right', align: 'center', labels: { color: '#1e293b', font: { size: isSmallScreen ? 9 : 11 }, boxWidth: 10, padding: 8 } },
+                            cutout: '58%',
                             datalabels: {
                                 display: true, color: '#ffffff', font: { weight: '900', size: isSmallScreen ? 9 : 11 }, textAlign: 'center',
                                 formatter: (value, ctx) => {
@@ -497,22 +547,40 @@
                     }
                 });
 
-                // === Donut: สิ่งแวดล้อม ===
+                // === Donut: สิ่งแวดล้อม (แยกย่อย EAR/EC ในทั้งสมบูรณ์และคงเหลือ) ===
                 const ctxEnv = document.getElementById('envPieChart').getContext('2d');
                 if (envPieChartInstance) envPieChartInstance.destroy();
-                const eComp = summaryRow ? Number(summaryRow[45]) : 0;
-                const eRem  = summaryRow ? Number(summaryRow[46]) : 0;
+                const eComp = envRow24  ? (Number(envRow24[45])  || 0) : 0;
+                const eRem  = envRow24  ? (Number(envRow24[46])  || 0) : 0;
+                const eCompEarV = envRow110 ? (Number(envRow110[50]) || 0) : 0;
+                const eCompEcV  = envRow110 ? (Number(envRow110[51]) || 0) : 0;
+                const eRemEarV  = envRow110 ? (Number(envRow110[52]) || 0) : 0;
+                const eRemEcV   = envRow110 ? (Number(envRow110[53]) || 0) : 0;
                 envPieChartInstance = new Chart(ctxEnv, {
                     type: 'doughnut',
-                    data: { labels: ['สมบูรณ์', 'คงเหลือ'], datasets: [{ data: [eComp, eRem], backgroundColor: ['#6366f1', '#f43f5e'], borderWidth: 1, borderColor: '#ffffff' }] },
+                    data: {
+                        labels: ['สมบูรณ์ • EAR', 'สมบูรณ์ • EC', 'คงเหลือ • EAR', 'คงเหลือ • EC'],
+                        datasets: [{
+                            data: [eCompEarV, eCompEcV, eRemEarV, eRemEcV],
+                            backgroundColor: ['#4f46e5', '#a5b4fc', '#e11d48', '#fda4af'],
+                            borderWidth: 2, borderColor: '#ffffff'
+                        }]
+                    },
                     options: {
                         responsive: true, maintainAspectRatio: false, layout: { padding: 6 },
-                        onClick: (event, elements) => { if (elements.length > 0) showDetailModal('environment', 'ทุกภูมิภาค', elements[0].index, sheetData); },
+                        onClick: (event, elements) => {
+                            if (elements.length > 0) {
+                                showDetailModal('environment', 'ทุกภูมิภาค', elements[0].index, sheetData);
+                            }
+                        },
                         plugins: {
-                            legend: { display: true, position: 'bottom', labels: { color: '#1e293b', font: { size: isSmallScreen ? 9 : 11 }, boxWidth: 10, padding: 4 } },
-                            cutout: '55%',
+                            legend: {
+                                display: true, position: 'right', align: 'center',
+                                labels: { color: '#1e293b', font: { size: isSmallScreen ? 8 : 10 }, boxWidth: 10, padding: 8 }
+                            },
+                            cutout: '58%',
                             datalabels: {
-                                display: true, color: '#ffffff', font: { weight: '900', size: isSmallScreen ? 9 : 11 }, textAlign: 'center',
+                                display: true, color: '#ffffff', font: { weight: '900', size: isSmallScreen ? 8 : 10 }, textAlign: 'center',
                                 formatter: (value, ctx) => {
                                     let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
                                     let pct = sum > 0 ? ((value * 100) / sum).toFixed(1) + "%" : "0%";
@@ -535,7 +603,7 @@
         // Modal: row[26]=ชื่อสทล., row[2]=ชื่อแขวง, targetColumn=ค่าแจกแจงรายแขวง
         // shapefile: col 5 (เสร็จ), 6 (เหลือ)
         // map:       col 11 (เสร็จ), 12 (เหลือ)
-        // env:       col 21 (สมบูรณ์), 22 (เหลือ)
+        // env:       col 50 (สมบูรณ์ EAR), 51 (สมบูรณ์ EC), 52 (คงเหลือ EAR), 53 (คงเหลือ EC)
         function showDetailModal(chartType, scopeName, clickIndex, sheetData) {
             const modal          = document.getElementById('detailsModal');
             const modalTitle     = document.getElementById('modalTitle');
@@ -556,10 +624,14 @@
                 badgeClass   = (clickIndex === 0) ? "bg-amber-50 text-amber-700 border-amber-200" : "bg-rose-50 text-rose-700 border-rose-200";
                 modalTitle.innerHTML = `<span class="h-3 w-1 bg-amber-400 rounded-full"></span> แผนที่ประกอบคำขอ ${statusLabel} <span class="text-xs text-slate-400 font-normal ml-1">(รวมทุก สทล.)</span>`;
             } else if (chartType === 'environment') {
-                targetColumn = (clickIndex === 0) ? 21 : 22;
-                statusLabel  = (clickIndex === 0) ? "สมบูรณ์" : "คงเหลือ";
-                colorClass   = (clickIndex === 0) ? "text-indigo-600" : "text-rose-500";
-                badgeClass   = (clickIndex === 0) ? "bg-indigo-50 text-indigo-700 border-indigo-200" : "bg-rose-50 text-rose-700 border-rose-200";
+                // index: 0 = สมบูรณ์ EAR (AY/50), 1 = สมบูรณ์ EC (AZ/51), 2 = คงเหลือ EAR (BA/52), 3 = คงเหลือ EC (BB/53)
+                const envColumns = [50, 51, 52, 53];
+                const envLabels  = ["สมบูรณ์ • EAR", "สมบูรณ์ • EC", "คงเหลือ • EAR", "คงเหลือ • EC"];
+                targetColumn = envColumns[clickIndex] ?? 50;
+                statusLabel  = envLabels[clickIndex] ?? envLabels[0];
+                const isCompleted = clickIndex < 2;
+                colorClass   = isCompleted ? "text-indigo-600" : "text-rose-500";
+                badgeClass   = isCompleted ? "bg-indigo-50 text-indigo-700 border-indigo-200" : "bg-rose-50 text-rose-700 border-rose-200";
                 modalTitle.innerHTML = `<span class="h-3 w-1 bg-indigo-500 rounded-full"></span> รายงานสิ่งแวดล้อม ${statusLabel} <span class="text-xs text-slate-400 font-normal ml-1">(รวมทุก สทล.)</span>`;
             }
 
@@ -688,7 +760,7 @@
             return a.day === b.day && a.month === b.month;
         }
 
-        function buildDailyRequestRows(colIndex) {
+        function buildDailyRequestRows(colIndex, typeColIndex) {
             const rows = [];
             currentSheetData.forEach((row, idx) => {
                 if (idx === 0) return; // ข้ามแถวหัวตาราง (row 1 ของชีท)
@@ -703,7 +775,10 @@
                 // เทียบวัน/เดือนของคอลัมน์นี้ (X / AM / AD / AE / AF) กับวันที่ที่แสดงในกรอบความคืบหน้า (currentReportDate)
                 if (!isSameDayMonth(cellVal, currentReportDate)) return;
 
-                rows.push({ stl: stlName, khwaeng: khwaeng, req: reqNo });
+                // คอลัมน์ Y (index 24) = ประเภทรายงาน EAR/EC (ใช้กับรายงานสิ่งแวดล้อมเท่านั้น)
+                const reqType = (typeColIndex !== undefined && row[typeColIndex]) ? row[typeColIndex].toString().trim() : "";
+
+                rows.push({ stl: stlName, khwaeng: khwaeng, req: reqNo, type: reqType });
             });
             return rows;
         }
@@ -716,13 +791,16 @@
             rows.forEach(r => {
                 const key = r.stl + "‖" + r.khwaeng;
                 if (!grouped[key]) grouped[key] = { stl: r.stl, khwaeng: r.khwaeng, reqList: [] };
-                grouped[key].reqList.push(r.req);
+                grouped[key].reqList.push(r);
             });
             let html = "";
             for (const group of Object.values(grouped)) {
                 dailyGroupToggleCounter++;
                 const groupId = "daily-group-" + dailyGroupToggleCounter;
-                const itemsHtml = group.reqList.map(req => `<div class="flex items-center gap-2 py-1.5 border-b border-slate-100 last:border-0 pl-3 text-slate-700 font-medium"><span class="h-1.5 w-1.5 rounded-full bg-slate-300"></span><span>${req}</span></div>`).join("");
+                const itemsHtml = group.reqList.map(item => {
+                    const typeTag = item.type ? ` <span class="text-indigo-500 font-bold">รายงาน ${item.type}</span>` : "";
+                    return `<div class="flex items-center gap-2 py-1.5 border-b border-slate-100 last:border-0 pl-3 text-slate-700 font-medium"><span class="h-1.5 w-1.5 rounded-full bg-slate-300"></span><span>${item.req}${typeTag}</span></div>`;
+                }).join("");
                 html += `<div class="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
                     <div class="px-4 py-2.5 flex justify-between items-center border-b border-slate-200 bg-slate-100">
                         <div class="min-w-0">
@@ -771,9 +849,9 @@
                 bodyHtml = renderDailyRequestGroup(rows, "bg-amber-50 text-amber-700 border-amber-200");
             } else if (category === 'env') {
                 modalTitle.innerHTML = `<span class="h-3 w-1 bg-indigo-500 rounded-full"></span> รายละเอียดคำขอรายงานสิ่งแวดล้อม ของวันนี้`;
-                const draftRows = buildDailyRequestRows(29);
-                const recvRows  = buildDailyRequestRows(30);
-                const compRows  = buildDailyRequestRows(31);
+                const draftRows = buildDailyRequestRows(29, 24);
+                const recvRows  = buildDailyRequestRows(30, 24);
+                const compRows  = buildDailyRequestRows(31, 24);
                 totalCount = draftRows.length + recvRows.length + compRows.length;
 
                 const draftHtml = renderDailyRequestGroup(draftRows, "bg-indigo-50 text-indigo-700 border-indigo-200");
