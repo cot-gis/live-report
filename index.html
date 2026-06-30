@@ -20,12 +20,24 @@
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(100,116,139,0.4); border-radius: 4px; }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(100,116,139,0.7); }
 
-        @media (min-width: 1024px) {
-            body { overflow: hidden; height: 100vh; width: 100vw; }
+        /* ใช้ orientation แทน width-based breakpoint:
+           - แนวนอน (landscape) ไม่ว่าจะเป็นคอม โน้ตบุ๊ก แท็บเล็ต หรือไอแพด -> แสดงจบในหน้าเดียว ไม่ต้องเลื่อน
+           - แนวตั้ง (portrait) -> จัดเรียงเป็นคอลัมน์และอนุญาตให้เลื่อนลงได้
+           (สำคัญ: ใช้ !important ทับคลาส lg:h-screen / lg:overflow-hidden ของ Tailwind ที่ผูกกับ width ไม่ใช่ orientation) */
+        @media (orientation: landscape) {
+            body { overflow: hidden !important; height: 100vh !important; width: 100vw; }
+            #panel-right-row { flex-direction: row !important; }
+            #panel-right-side { width: 32% !important; }
         }
-        @media (max-width: 1023px) {
+        @media (orientation: landscape) and (max-height: 500px) {
+            /* แนวนอนแต่จอเตี้ยมาก (เช่นมือถือหมุนนอน) เนื้อหาอาจไม่พอ ปล่อยให้ scroll ได้แทนการตัดทิ้ง */
+            body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
+        }
+        @media (orientation: portrait) {
             body { overflow-y: auto !important; height: auto !important; min-height: 100vh; }
             #main-content-row { flex-direction: column; }
+            #panel-right-row { flex-direction: column !important; }
+            #panel-right-side { width: 100% !important; }
             #panel-left {
                 order: 99;
                 width: 100% !important;
@@ -36,14 +48,26 @@
                 max-height: 340px;
             }
         }
+
+        /* ===== Fluid font-size: ไหลตามความกว้างจอจริง (vw) แทนการกระโดดเป็นขั้นแบบ breakpoint ===== */
+        /* ใช้กับตัวเลขหลักการ์ดที่ 1 (คำขอทั้งหมด) */
+        .stat-num-xl { font-size: clamp(1.5rem, 0.95rem + 2.2vw, 3.1rem); line-height: 1; }
+        /* ใช้กับตัวเลขการ์ดที่ 2 (Shapefile เสร็จ/คงเหลือ) */
+        .stat-num-lg { font-size: clamp(1rem, 0.72rem + 1.1vw, 1.6rem); line-height: 1; }
+        /* ใช้กับตัวเลข 3 คอลัมน์ของการ์ดที่ 3-4 (แผนที่/สิ่งแวดล้อม) ที่มักล้น/ถูกตัดบนโน้ตบุ๊ก-แท็บเล็ต */
+        .stat-num-md { font-size: clamp(0.8rem, 0.62rem + 0.75vw, 1.25rem); line-height: 1; }
+        /* ป้ายชื่อหัวการ์ด */
+        .stat-label  { font-size: clamp(0.6rem, 0.5rem + 0.4vw, 0.95rem); }
+        /* ตัวเลขย่อย EAR/EC */
+        .stat-num-xs { font-size: clamp(0.55rem, 0.45rem + 0.25vw, 0.75rem); }
     </style>
 </head>
 <body class="text-slate-800 min-h-screen w-full p-3 md:p-4 lg:p-5 flex flex-col lg:h-screen lg:overflow-hidden box-border text-sm font-semibold">
 
     <!-- ===== HEADER ===== -->
-    <div class="bg-white border border-slate-200 rounded-xl px-4 md:px-6 py-3 md:py-4 flex flex-wrap justify-between items-center gap-2 shadow-md shrink-0 mb-3">
+    <div class="bg-white border border-slate-200 rounded-xl px-4 md:px-6 py-[0.6rem] md:py-[0.8rem] flex flex-wrap justify-between items-center gap-2 shadow-md shrink-0 mb-[0.6rem]">
         <div class="min-w-0">
-            <h1 class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-black text-slate-800 tracking-wide flex items-center gap-2">
+            <h1 class="font-black text-slate-800 tracking-wide flex items-center gap-2" style="font-size: clamp(0.85rem, 0.68rem + 0.8vw, 1.5rem);">
                 <span class="h-3 w-3 rounded-full bg-sky-500 animate-pulse shrink-0"></span>
                 ระบบรายงานความก้าวหน้าการขออนุญาตใช้ประโยชน์พื้นที่ป่าไม้
             </h1>
@@ -57,84 +81,84 @@
     </div>
 
     <!-- ===== STAT CARDS ===== -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3 lg:gap-4 shrink-0 mb-2 md:mb-3 lg:mb-4">
-        <div class="bg-white border-t-4 border-t-sky-500 border-x border-b border-slate-200 rounded-xl p-3 md:p-4 flex flex-col justify-between h-28 md:h-32 lg:h-36 shadow-lg shadow-slate-200/60">
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 md:gap-3 lg:gap-4 shrink-0 mb-[0.4rem] md:mb-[0.6rem] lg:mb-[0.8rem]">
+        <div class="bg-white border-t-4 border-t-sky-500 border-x border-b border-slate-200 rounded-xl p-[0.6rem] md:p-[0.8rem] flex flex-col justify-between min-h-[5.6rem] md:min-h-[6.4rem] lg:min-h-[7.2rem] shadow-lg shadow-slate-200/60">
             <div class="flex justify-between items-center w-full">
-                <span class="text-xs md:text-sm lg:text-base font-black text-sky-600 uppercase tracking-wider block truncate">1. คำขอทั้งหมดในระบบ</span>
+                <span class="stat-label font-black text-sky-600 uppercase tracking-wider block truncate">1. คำขอทั้งหมดในระบบ</span>
                 <div class="p-1.5 bg-sky-50 rounded-lg text-sky-500 shrink-0">
                     <svg class="h-5 w-5 md:h-6 md:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586A1 1 0 0112 3.414L15.586 7a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
                 </div>
             </div>
             <div class="flex items-baseline justify-start gap-1.5 mt-auto">
-                <span id="total-requests" class="text-4xl md:text-5xl lg:text-6xl font-black text-slate-800 tracking-tight leading-none">-</span>
-                <span class="text-sm md:text-base font-black text-slate-500">รายการ</span>
+                <span id="total-requests" class="stat-num-xl font-black text-slate-800 tracking-tight">-</span>
+                <span class="stat-label font-black text-slate-500">รายการ</span>
             </div>
         </div>
 
-        <div class="bg-white border-t-4 border-t-emerald-500 border-x border-b border-slate-200 rounded-xl p-3 md:p-4 flex flex-col justify-between h-28 md:h-32 lg:h-36 shadow-lg shadow-slate-200/60">
+        <div class="bg-white border-t-4 border-t-emerald-500 border-x border-b border-slate-200 rounded-xl p-[0.6rem] md:p-[0.8rem] flex flex-col justify-between min-h-[5.6rem] md:min-h-[6.4rem] lg:min-h-[7.2rem] shadow-lg shadow-slate-200/60">
             <div class="flex justify-between items-center">
-                <span class="text-xs md:text-sm lg:text-base font-black text-emerald-600 uppercase tracking-wider block truncate">2. งาน Shapefile</span>
-                <span id="shp-percent" class="text-xs md:text-sm font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 shadow-sm">-%</span>
+                <span class="stat-label font-black text-emerald-600 uppercase tracking-wider block truncate">2. งาน Shapefile</span>
+                <span id="shp-percent" class="stat-num-xs font-black text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200 shadow-sm whitespace-nowrap">-%</span>
             </div>
             <div class="grid grid-cols-2 gap-2 mt-auto border-t border-slate-200 pt-1.5 text-center">
                 <div class="truncate">
-                    <span class="text-xs uppercase font-black tracking-wider text-slate-400 block mb-0.5">เสร็จสะสม</span>
-                    <span id="shp-completed" class="text-2xl md:text-3xl font-black text-emerald-600 leading-none">-</span>
+                    <span class="stat-label uppercase tracking-wider text-slate-400 block mb-0.5">เสร็จสะสม</span>
+                    <span id="shp-completed" class="stat-num-lg font-black text-emerald-600">-</span>
                 </div>
                 <div class="border-l border-slate-200 truncate">
-                    <span class="text-xs uppercase font-black tracking-wider text-slate-400 block mb-0.5">คงเหลือ</span>
-                    <span id="shp-remaining" class="text-2xl md:text-3xl font-black text-rose-500 leading-none">-</span>
+                    <span class="stat-label uppercase tracking-wider text-slate-400 block mb-0.5">คงเหลือ</span>
+                    <span id="shp-remaining" class="stat-num-lg font-black text-rose-500">-</span>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white border-t-4 border-t-amber-500 border-x border-b border-slate-200 rounded-xl p-3 md:p-4 flex flex-col justify-between h-28 md:h-32 lg:h-36 shadow-lg shadow-slate-200/60">
+        <div class="bg-white border-t-4 border-t-amber-500 border-x border-b border-slate-200 rounded-xl p-[0.6rem] md:p-[0.8rem] flex flex-col justify-between min-h-[5.6rem] md:min-h-[6.4rem] lg:min-h-[7.2rem] shadow-lg shadow-slate-200/60">
             <div class="flex justify-between items-center">
-                <span class="text-xs md:text-sm lg:text-base font-black text-amber-600 uppercase tracking-wider block truncate">3. แผนที่/แผนผัง</span>
-                <span id="map-percent" class="text-xs md:text-sm font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 shadow-sm">-%</span>
+                <span class="stat-label font-black text-amber-600 uppercase tracking-wider block truncate">3. แผนที่/แผนผัง</span>
+                <span id="map-percent" class="stat-num-xs font-black text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md border border-amber-200 shadow-sm whitespace-nowrap">-%</span>
             </div>
             <div class="grid grid-cols-3 gap-1 mt-auto border-t border-slate-200 pt-1.5 text-center">
                 <div class="truncate">
-                    <span class="text-xs font-black text-slate-400 block mb-0.5">ต้องทำ</span>
-                    <span id="map-total" class="text-base sm:text-lg md:text-3xl font-black text-slate-800 leading-none">-</span>
+                    <span class="stat-label font-black text-slate-400 block mb-0.5">ต้องทำ</span>
+                    <span id="map-total" class="stat-num-md font-black text-slate-800">-</span>
                 </div>
                 <div class="border-l border-slate-200 pl-1 truncate">
-                    <span class="text-xs font-black text-amber-600 block mb-0.5">เสร็จ</span>
-                    <span id="map-completed" class="text-base sm:text-lg md:text-3xl font-black text-amber-600 leading-none">-</span>
+                    <span class="stat-label font-black text-amber-600 block mb-0.5">เสร็จ</span>
+                    <span id="map-completed" class="stat-num-md font-black text-amber-600">-</span>
                 </div>
                 <div class="border-l border-slate-200 pl-1 truncate">
-                    <span class="text-xs font-black text-rose-500 block mb-0.5">เหลือ</span>
-                    <span id="map-remaining" class="text-base sm:text-lg md:text-3xl font-black text-rose-500 leading-none">-</span>
+                    <span class="stat-label font-black text-rose-500 block mb-0.5">เหลือ</span>
+                    <span id="map-remaining" class="stat-num-md font-black text-rose-500">-</span>
                 </div>
             </div>
         </div>
 
-        <div class="bg-white border-t-4 border-t-indigo-500 border-x border-b border-slate-200 rounded-xl p-3 md:p-4 flex flex-col justify-between h-28 md:h-32 lg:h-36 shadow-lg shadow-slate-200/60">
+        <div class="bg-white border-t-4 border-t-indigo-500 border-x border-b border-slate-200 rounded-xl p-[0.6rem] md:p-[0.8rem] flex flex-col justify-between min-h-[5.6rem] md:min-h-[6.4rem] lg:min-h-[7.2rem] shadow-lg shadow-slate-200/60">
             <div class="flex justify-between items-center">
-                <span class="text-xs md:text-sm lg:text-base font-black text-indigo-600 uppercase tracking-wider block truncate">4. รายงานสิ่งแวดล้อม</span>
-                <span id="env-percent" class="text-xs md:text-sm font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200 shadow-sm">-%</span>
+                <span class="stat-label font-black text-indigo-600 uppercase tracking-wider block truncate">4. รายงานสิ่งแวดล้อม</span>
+                <span id="env-percent" class="stat-num-xs font-black text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded-md border border-indigo-200 shadow-sm whitespace-nowrap">-%</span>
             </div>
             <div class="grid grid-cols-3 gap-1 mt-auto border-t border-slate-200 pt-1.5 text-center">
                 <div class="truncate">
-                    <span class="text-xs font-black text-slate-400 block mb-0.5">ต้องทำ</span>
-                    <span id="env-total" class="text-base sm:text-lg md:text-3xl font-black text-slate-800 leading-none">-</span>
-                    <div class="flex justify-center gap-3 md:gap-4 mt-0.5 text-[10px] md:text-xs font-bold text-slate-400">
+                    <span class="stat-label font-black text-slate-400 block mb-0.5">ต้องทำ</span>
+                    <span id="env-total" class="stat-num-md font-black text-slate-800">-</span>
+                    <div class="flex justify-center gap-1.5 md:gap-2 mt-0.5 stat-num-xs font-bold text-slate-400">
                         <span>EAR: <span id="env-total-ear" class="text-slate-600 font-black">-</span></span>
                         <span>EC: <span id="env-total-ec" class="text-slate-600 font-black">-</span></span>
                     </div>
                 </div>
                 <div class="border-l border-slate-200 pl-1 truncate">
-                    <span class="text-xs font-black text-indigo-600 block mb-0.5">สมบูรณ์</span>
-                    <span id="env-completed" class="text-base sm:text-lg md:text-3xl font-black text-indigo-600 leading-none">-</span>
-                    <div class="flex justify-center gap-3 md:gap-4 mt-0.5 text-[10px] md:text-xs font-bold text-indigo-400">
+                    <span class="stat-label font-black text-indigo-600 block mb-0.5">สมบูรณ์</span>
+                    <span id="env-completed" class="stat-num-md font-black text-indigo-600">-</span>
+                    <div class="flex justify-center gap-1.5 md:gap-2 mt-0.5 stat-num-xs font-bold text-indigo-400">
                         <span>EAR: <span id="env-completed-ear" class="text-indigo-600 font-black">-</span></span>
                         <span>EC: <span id="env-completed-ec" class="text-indigo-600 font-black">-</span></span>
                     </div>
                 </div>
                 <div class="border-l border-slate-200 pl-1 truncate">
-                    <span class="text-xs font-black text-rose-500 block mb-0.5">เหลือ</span>
-                    <span id="env-remaining" class="text-base sm:text-lg md:text-3xl font-black text-rose-500 leading-none">-</span>
-                    <div class="flex justify-center gap-3 md:gap-4 mt-0.5 text-[10px] md:text-xs font-bold text-rose-400">
+                    <span class="stat-label font-black text-rose-500 block mb-0.5">เหลือ</span>
+                    <span id="env-remaining" class="stat-num-md font-black text-rose-500">-</span>
+                    <div class="flex justify-center gap-1.5 md:gap-2 mt-0.5 stat-num-xs font-bold text-rose-400">
                         <span>EAR: <span id="env-remaining-ear" class="text-rose-500 font-black">-</span></span>
                         <span>EC: <span id="env-remaining-ec" class="text-rose-500 font-black">-</span></span>
                     </div>
@@ -147,7 +171,7 @@
     <div id="main-content-row" class="flex-1 flex flex-row gap-3 md:gap-4 lg:gap-5 min-h-0">
 
         <!-- ===== PANEL LEFT (กรอบ 2) - ความคืบหน้า จากไฟล์ 2.html ===== -->
-        <div id="panel-left" class="w-[15%] bg-white border border-slate-200 rounded-xl p-3 md:p-4 flex flex-col shadow-md min-h-0 shrink-0">
+        <div id="panel-left" class="w-[18%] bg-white border border-slate-200 rounded-xl p-3 md:p-4 flex flex-col shadow-md min-h-0 shrink-0">
             <h3 class="text-sm font-black text-sky-600 mb-2 flex flex-col gap-1 shrink-0 border-b border-slate-200 pb-2">
                 <span class="flex items-center gap-1.5 text-base">
                     <span class="h-3 w-0.5 bg-sky-500 rounded-full"></span> ความคืบหน้า
@@ -199,7 +223,7 @@
         </div>
 
         <!-- ===== PANEL RIGHT (กรอบ 1) - Charts จากไฟล์ 1.html ===== -->
-        <div class="flex-1 flex flex-col lg:flex-row gap-3 md:gap-4 lg:gap-5 min-h-0 min-w-0">
+        <div id="panel-right-row" class="flex-1 flex flex-col lg:flex-row gap-3 md:gap-4 lg:gap-5 min-h-0 min-w-0">
 
             <!-- Bar chart: Shapefile -->
             <div class="flex-1 bg-white border border-slate-200 rounded-xl p-3 md:p-4 flex flex-col shadow-md min-h-0 min-w-0" style="min-height: 280px;">
@@ -212,7 +236,7 @@
             </div>
 
             <!-- Donut charts: แผนที่ + สิ่งแวดล้อม -->
-            <div class="w-full lg:w-[32%] flex flex-col justify-between gap-3 md:gap-4 min-h-0 shrink-0">
+            <div id="panel-right-side" class="w-full lg:w-[32%] flex flex-col justify-between gap-3 md:gap-4 min-h-0 shrink-0">
                 <div class="flex-1 bg-white border border-slate-200 rounded-xl p-3 md:p-4 flex flex-col shadow-md min-h-0" style="min-height: 200px;">
                     <h4 class="font-black text-slate-800 text-sm md:text-base border-b border-slate-200 pb-2 flex items-center gap-1.5 shrink-0">
                         <span class="h-2.5 w-2.5 rounded-full bg-amber-400"></span> งานแผนที่คำขอ <span class="text-[10px] font-bold text-slate-400 ml-auto">(คลิกที่ชาร์ตเพื่อดูรายแขวง)</span>
@@ -534,7 +558,7 @@
                         onClick: (event, elements) => { if (elements.length > 0) showDetailModal('map', 'ทุกภูมิภาค', elements[0].index, sheetData); },
                         plugins: {
                             legend: { display: true, position: 'right', align: 'center', labels: { color: '#1e293b', font: { size: isSmallScreen ? 9 : 11 }, boxWidth: 10, padding: 8 } },
-                            cutout: '58%',
+                            cutout: '50%',
                             datalabels: {
                                 display: true, color: '#ffffff', font: { weight: '900', size: isSmallScreen ? 9 : 11 }, textAlign: 'center',
                                 formatter: (value, ctx) => {
@@ -578,13 +602,14 @@
                                 display: true, position: 'right', align: 'center',
                                 labels: { color: '#1e293b', font: { size: isSmallScreen ? 8 : 10 }, boxWidth: 10, padding: 8 }
                             },
-                            cutout: '58%',
+                            cutout: '42%',
                             datalabels: {
-                                display: true, color: '#ffffff', font: { weight: '900', size: isSmallScreen ? 8 : 10 }, textAlign: 'center',
+                                display: true, color: '#ffffff', font: { weight: '900', size: isSmallScreen ? 7 : 9 }, textAlign: 'center',
                                 formatter: (value, ctx) => {
                                     let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
                                     let pct = sum > 0 ? ((value * 100) / sum).toFixed(1) + "%" : "0%";
-                                    return value > 0 ? `${value.toLocaleString()}\n(${pct})` : '';
+                                    if (value <= 0) return '';
+                                    return value < 100 ? `${value.toLocaleString()}` : `${value.toLocaleString()}\n(${pct})`;
                                 }
                             }
                         }
